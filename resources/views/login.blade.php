@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('build/assets/images/pup-logo.png') }}">
     <title>PUP Enrollment Portal</title>
     @vite([
         'resources/sass/app.scss',
