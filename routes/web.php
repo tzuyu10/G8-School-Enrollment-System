@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
 
-Route::get('/', function () {
-    return view('login');
+Route::get('/', [LoginController::class, 'index'])->name('login');
+
+Route::get('/home', function(){
+    return view('common.main');
 });
 
 Route::get('/register', function(){

@@ -16,13 +16,14 @@ body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0.27) 0%, rgba(255, 255, 255, 0.27) 100%), url('../../build/images/background-image.png') lightgray 50% / cover no-repeat;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.27) 0%, rgba(255, 255, 255, 0.27) 100%), 
+    url('../../build/assets/images/background-image.png') lightgray 50% / cover no-repeat;
     filter: blur(4.25px) brightness(0.85);
     transform: scale(1.05);
     z-index: -1;
 }
 
-/* ── Hero ───────────────────────────────────── */
+/* Hero  */
 .hero {
     position: relative;
     flex: 1;
@@ -46,7 +47,7 @@ body::before {
     z-index: 1;
 }
 
-/* ── Brand ──────────────────────────────────── */
+/* Brand */
 .brand-mark {
     position: absolute;
     top: 20px;
@@ -81,7 +82,7 @@ body::before {
     color: rgba(255,255,255,.72);
 }
 
-/* ── Left tagline ───────────────────────────── */
+/* Left tagline  */
 .hero-left {
     position: relative;
     z-index: 10;
@@ -117,7 +118,7 @@ body::before {
 
 .hero-headline .text-gold { color: var(--pup-gold); }
 
-/* ── Card ───────────────────────────────────── */
+/* Card */
 .hero-right {
     position: relative;
     z-index: 10;
@@ -156,7 +157,7 @@ body::before {
     color: var(--pup-maroon2);
 }
 
-/* ── Inputs ─────────────────────────────────── */
+/* Inputs */
 .form-label {
     font-size: .78rem;
     font-weight: 600;
@@ -271,7 +272,7 @@ body::before {
 
 .contact-note a:hover { text-decoration: underline; }
 
-/* ── Responsive ─────────────────────────────── */
+/* Responsive */
 @media (max-width: 800px) {
     .hero { flex-direction: column; min-height: unset; }
 
