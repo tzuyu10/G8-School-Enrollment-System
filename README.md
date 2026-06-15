@@ -82,6 +82,8 @@ cd g8-webdev-proj
 
 ```bash
 composer install
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 ```
 
 ### 3. Configure environment
@@ -140,7 +142,6 @@ npm run build
 
 ```bash
 php artisan serve
-npm run dev
 ```
 
 Then open `http://127.0.0.1:8000` in your browser.
