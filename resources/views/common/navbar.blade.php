@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm">
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm fixed-top">
   <div class="container-fluid px-4">
     <a class="navbar-brand d-flex align-items-center" href="#">
       <img src="{{ asset('build/assets/images/pup-logo.png') }}" alt="Logo" width="40" height="40" class="me-2">

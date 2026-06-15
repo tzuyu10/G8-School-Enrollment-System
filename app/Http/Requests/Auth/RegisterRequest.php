@@ -15,7 +15,6 @@ class RegisterRequest extends FormRequest
     {
         return [
             // Account credentials
-            'full_name'         => ['required', 'string', 'max:255'],
             'email'             => ['required', 'email', 'unique:profiles,email'],
             'password'          => ['required', 'string', 'min:8', 'confirmed'],
 
@@ -33,7 +32,6 @@ class RegisterRequest extends FormRequest
             'current_address'   => ['nullable', 'string'],
 
             // Family
-            'guardian_name'     => ['required', 'string', 'max:255'],
             'guardian_relation' => ['required', 'string', 'max:100'],
             'guardian_contact'  => ['required', 'string', 'max:20'],
             'father_name'       => ['nullable', 'string', 'max:255'],
