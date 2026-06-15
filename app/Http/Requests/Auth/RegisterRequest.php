@@ -6,19 +6,20 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
+    public function authorize(): bool { return true; }
 
     public function rules(): array
     {
         return [
-            // Account credentials
-            'email'             => ['required', 'email', 'unique:profiles,email'],
-            'password'          => ['required', 'string', 'min:8', 'confirmed'],
+            // Account
+            'first_name'  => ['required', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'string', 'max:100'],
+            'last_name'   => ['required', 'string', 'max:100'],
+            'suffix'      => ['nullable', 'string', 'max:20'],
+            'email'       => ['required', 'email', 'unique:profiles,email'],
+            'password'    => ['required', 'string', 'min:8', 'confirmed'],
 
-            // Enrollment form — student info
+            // Student info
             'student_type'      => ['required', 'in:freshman,transferee,shiftee,returnee'],
             'birthdate'         => ['required', 'date', 'before:today'],
             'gender'            => ['required', 'in:male,female,other'],
@@ -31,13 +32,27 @@ class RegisterRequest extends FormRequest
             'permanent_address' => ['required', 'string'],
             'current_address'   => ['nullable', 'string'],
 
-            // Family
-            'guardian_relation' => ['required', 'string', 'max:100'],
-            'guardian_contact'  => ['required', 'string', 'max:20'],
-            'father_name'       => ['nullable', 'string', 'max:255'],
-            'mother_name'       => ['nullable', 'string', 'max:255'],
+            // Father
+            'father_first_name'  => ['nullable', 'string', 'max:100'],
+            'father_middle_name' => ['nullable', 'string', 'max:100'],
+            'father_last_name'   => ['nullable', 'string', 'max:100'],
+            'father_suffix'      => ['nullable', 'string', 'max:20'],
 
-            // Academic background (required for transferees/shiftees)
+            // Mother
+            'mother_first_name'  => ['nullable', 'string', 'max:100'],
+            'mother_middle_name' => ['nullable', 'string', 'max:100'],
+            'mother_last_name'   => ['nullable', 'string', 'max:100'],
+            'mother_suffix'      => ['nullable', 'string', 'max:20'],
+
+            // Guardian
+            'guardian_first_name'  => ['required', 'string', 'max:100'],
+            'guardian_middle_name' => ['nullable', 'string', 'max:100'],
+            'guardian_last_name'   => ['required', 'string', 'max:100'],
+            'guardian_suffix'      => ['nullable', 'string', 'max:20'],
+            'guardian_relation'    => ['required', 'string', 'max:100'],
+            'guardian_contact'     => ['required', 'string', 'max:20'],
+
+            // Academic background
             'previous_school'   => ['nullable', 'string', 'max:255'],
             'previous_program'  => ['nullable', 'string', 'max:255'],
         ];
@@ -46,12 +61,13 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.unique'          => 'This email is already registered.',
-            'password.confirmed'    => 'Passwords do not match.',
-            'student_type.in'       => 'Student type must be freshman, transferee, shiftee, or returnee.',
-            'birthdate.before'      => 'Birthdate must be a past date.',
-            'gender.in'             => 'Gender must be male, female, or other.',
-            'civil_status.in'       => 'Civil status must be single, married, or widowed.',
+            'first_name.required'          => 'First name is required.',
+            'last_name.required'           => 'Last name is required.',
+            'email.unique'                 => 'This email is already registered.',
+            'password.confirmed'           => 'Passwords do not match.',
+            'birthdate.before'             => 'Birthdate must be a past date.',
+            'guardian_first_name.required' => 'Guardian first name is required.',
+            'guardian_last_name.required'  => 'Guardian last name is required.',
         ];
     }
 }

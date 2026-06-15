@@ -8,7 +8,6 @@ use App\Models\Program;
 use App\Models\Semester;
 use App\Models\YearLevel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class EnrollmentController extends Controller
 {
@@ -16,11 +15,9 @@ class EnrollmentController extends Controller
     {
         $user = $request->user()->load('studentProfile');
 
-        // Check if already applied this active semester
-        $activeSemester = Cache::remember('active_semester', 3600, fn() =>
-            Semester::where('is_active', true)->first()
-        );
+        $activeSemester = Semester::where('is_active', true)->first();
 
+        // Redirect if already has active application this semester
         if ($activeSemester) {
             $existing = EnrollmentApplication::where('student_id', $user->id)
                 ->where('semester_id', $activeSemester->id)
@@ -33,15 +30,15 @@ class EnrollmentController extends Controller
             }
         }
 
-        $semesters  = Cache::remember('all_semesters', 3600, fn() =>
-            Semester::with('academicYear')->orderBy('is_active', 'desc')->get()
-        );
-        $programs   = Cache::remember('all_programs', 3600, fn() =>
-            Program::with('college')->orderBy('code')->get()
-        );
-        $yearLevels = Cache::remember('year_levels', 3600, fn() =>
-            YearLevel::orderBy('sort_order')->get()
-        );
+        $semesters  = Semester::with('academicYear')
+            ->orderBy('is_active', 'desc')
+            ->get();
+
+        $programs   = Program::with('college')
+            ->orderBy('code')
+            ->get();
+
+        $yearLevels = YearLevel::orderBy('sort_order')->get();
 
         return view('enroll', [
             'user'           => $user,
@@ -73,9 +70,7 @@ class EnrollmentController extends Controller
                 ->with('status', 'You already have an active enrollment application this semester.');
         }
 
-        $pendingStatus = Cache::remember('status_pending_app', 3600, fn() =>
-            ApplicationStatus::where('code', 'pending')->first()
-        );
+        $pendingStatus = ApplicationStatus::where('code', 'pending')->firstOrFail();
 
         EnrollmentApplication::create([
             'student_id'    => $user->id,

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\EnrollmentApplication;
 use App\Models\Semester;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class StudentController extends Controller
 {
@@ -27,9 +26,8 @@ class StudentController extends Controller
             ->orderBy('submitted_at', 'desc')
             ->get();
 
-        $activeSemester = Cache::remember('active_semester', 3600, fn() =>
-            Semester::where('is_active', true)->first()
-        );
+        // No cache — direct query to avoid unserialize issues
+        $activeSemester = Semester::where('is_active', true)->first();
 
         $hasActiveApplication = $activeSemester
             ? $applications

@@ -12,7 +12,7 @@ class SectionAndOfferingSeeder extends Seeder
     public function run(): void
     {
         $bscsId       = DB::table('programs')->where('code', 'BSCS')->value('id');
-        $thirdYearId  = DB::table('year_levels')->where('label', '3rd Year')->value('id');
+        $yearLevelIds = DB::table('year_levels')->pluck('id', 'label');
         $facultyRole  = DB::table('roles')->where('code', 'faculty')->value('id');
         $activeStatus = DB::table('profile_statuses')->where('code', 'active')->value('id');
 
@@ -22,13 +22,13 @@ class SectionAndOfferingSeeder extends Seeder
 
         // ── Seed faculty ──────────────────────────────────────────
         $facultyData = [
-            ['full_name' => 'Ken Dela Cruz',   'email' => 'ken.delacruz@pup.edu.ph'],
-            ['full_name' => 'Von Santos',       'email' => 'von.santos@pup.edu.ph'],
-            ['full_name' => 'Florence Reyes',   'email' => 'florence.reyes@pup.edu.ph'],
-            ['full_name' => 'Gabriel Mendoza',  'email' => 'gabriel.mendoza@pup.edu.ph'],
-            ['full_name' => 'Maria Lim',        'email' => 'maria.lim@pup.edu.ph'],
-            ['full_name' => 'Jose Bautista',    'email' => 'jose.bautista@pup.edu.ph'],
-            ['full_name' => 'Ana Ramos',        'email' => 'ana.ramos@pup.edu.ph'],
+            ['first_name' => 'Ken', 'last_name' => 'Dela Cruz', 'email' => 'ken.delacruz@pup.edu.ph'],
+            ['first_name' => 'Von', 'last_name' => 'Santos', 'email' => 'von.santos@pup.edu.ph'],
+            ['first_name' => 'Florence', 'last_name' => 'Reyes', 'email' => 'florence.reyes@pup.edu.ph'],
+            ['first_name' => 'Gabriel', 'last_name' => 'Mendoza', 'email' => 'gabriel.mendoza@pup.edu.ph'],
+            ['first_name' => 'Maria', 'last_name' => 'Lim', 'email' => 'maria.lim@pup.edu.ph'],
+            ['first_name' => 'Jose', 'last_name' => 'Bautista', 'email' => 'jose.bautista@pup.edu.ph'],
+            ['first_name' => 'Ana', 'last_name' => 'Ramos', 'email' => 'ana.ramos@pup.edu.ph'],
         ];
 
         $facultyIds = [];
@@ -42,7 +42,8 @@ class SectionAndOfferingSeeder extends Seeder
                     'id'         => $id,
                     'role_id'    => $facultyRole,
                     'status_id'  => $activeStatus,
-                    'full_name'  => $f['full_name'],
+                    'first_name' => $f['first_name'],
+                    'last_name'  => $f['last_name'],
                     'email'      => $f['email'],
                     'password'   => Hash::make('faculty123'),
                     'created_at' => now(),
@@ -103,19 +104,43 @@ class SectionAndOfferingSeeder extends Seeder
 
         $labs = ['S501', 'S502', 'S503', 'S504', 'S505', 'S506', 'S507', 'S508', 'S509', 'S510'];
 
-        // 3rd Year subjects per semester
-        $subjectsBySem = [
-            $sem1Id => ['COMP 019', 'COSC 302', 'ELEC CS-E1', 'COSC 301', 'COMP 015', 'COMP 013', 'COSC 303'],
-            $sem2Id => ['GEED 006', 'ELEC CS-E2', 'COSC 305', 'COMP 020', 'COSC 304', 'COMP 021', 'COMP 016'],
-            $sumId  => ['COSC 306'],
+        $subjectsByYearAndSem = [
+            1 => [
+                $sem1Id => ['COMP 001', 'COMP 002', 'GEED 004', 'GEED 005', 'GEED 020', 'GEED 032', 'NSTP 001', 'PATHFIT 1'],
+                $sem2Id => ['COMP 003', 'COMP 004', 'GEED 001', 'GEED 007', 'GEED 033', 'MATH 017', 'NSTP 002', 'PATHFIT 2'],
+            ],
+            2 => [
+                $sem1Id => ['COSC 201', 'COSC 202', 'COMP 005', 'COMP 006', 'COMP 009', 'ELEC CS-FE1', 'GEED 008', 'PATHFIT 3'],
+                $sem2Id => ['COSC 203', 'COMP 007', 'COMP 008', 'COMP 010', 'COMP 011', 'ELEC CS-FE2', 'GEED 010', 'PATHFIT 4'],
+            ],
+            3 => [
+                $sem1Id => ['COMP 019', 'COSC 302', 'ELEC CS-E1', 'COSC 301', 'COMP 015', 'COMP 013', 'COSC 303'],
+                $sem2Id => ['GEED 006', 'ELEC CS-E2', 'COSC 305', 'COMP 020', 'COSC 304', 'COMP 021', 'COMP 016'],
+                $sumId  => ['COSC 306'],
+            ],
+            4 => [
+                $sem1Id => ['COSC 401', 'COMP 022', 'ELEC CS-E3', 'GEED 002', 'GEED 003', 'GEED 026'],
+                $sem2Id => ['COSC 402', 'COMP 023', 'ELEC CS-E4', 'GEED 037'],
+            ],
         ];
 
-        $sectionNames = ['BSCS 3-1', 'BSCS 3-1N', 'BSCS 3-2', 'BSCS 3-3', 'BSCS 3-4', 'BSCS 3-5'];
+        $sectionSuffixes = ['1', '1N', '2', '3', '4', '5'];
 
-        foreach ([$sem1Id, $sem2Id, $sumId] as $semId) {
-            $subjectCodes = $subjectsBySem[$semId];
+        foreach ($subjectsByYearAndSem as $year => $subjectsBySem) {
+            $yearLevelId = $yearLevelIds["{$year}st Year"]
+                ?? $yearLevelIds["{$year}nd Year"]
+                ?? $yearLevelIds["{$year}rd Year"]
+                ?? $yearLevelIds["{$year}th Year"]
+                ?? null;
 
-            foreach ($sectionNames as $sectionIndex => $sectionName) {
+            if (!$yearLevelId) {
+                continue;
+            }
+
+            foreach ($subjectsBySem as $semId => $subjectCodes) {
+                foreach ($sectionSuffixes as $sectionIndex => $sectionSuffix) {
+                    $sectionName = "BSCS {$year}-{$sectionSuffix}";
+
                 // Create section if not exists
                 $sectionId = DB::table('sections')
                     ->where('name', $sectionName)
@@ -128,7 +153,7 @@ class SectionAndOfferingSeeder extends Seeder
                         'id'            => $sectionId,
                         'semester_id'   => $semId,
                         'program_id'    => $bscsId,
-                        'year_level_id' => $thirdYearId,
+                        'year_level_id' => $yearLevelId,
                         'adviser_id'    => $facultyIds[$sectionIndex % count($facultyIds)],
                         'name'          => $sectionName,
                         'max_capacity'  => 40,
@@ -137,7 +162,7 @@ class SectionAndOfferingSeeder extends Seeder
 
                 $vacantDays       = $vacantDayPairs[$sectionIndex];
                 $saturdayIsVacant = in_array('Saturday', $vacantDays);
-                $isNightSection   = str_contains($sectionName, '3-1N');
+                $isNightSection   = str_contains($sectionName, '-1N');
 
                 // Filter slots: remove any that use a vacant day
                 $availableSlots = array_values(array_filter($allSlots, function ($slot) use ($vacantDays, $isNightSection) {
@@ -199,6 +224,7 @@ class SectionAndOfferingSeeder extends Seeder
                         'room'       => $room,
                         'schedule'   => $schedule,
                     ]);
+                }
                 }
             }
         }

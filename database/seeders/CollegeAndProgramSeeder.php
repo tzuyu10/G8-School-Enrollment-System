@@ -161,7 +161,7 @@ class CollegeAndProgramSeeder extends Seeder
 
         foreach ($colleges as $college) {
             $programs = $college['programs'];
-            $collegeId = Str::uuid();
+            $collegeId = (string) Str::uuid();
 
             DB::table('colleges')->insertOrIgnore([
                 'id'   => $collegeId,
@@ -169,9 +169,13 @@ class CollegeAndProgramSeeder extends Seeder
                 'name' => $college['name'],
             ]);
 
+            $collegeId = DB::table('colleges')
+                ->where('code', $college['code'])
+                ->value('id');
+
             foreach ($programs as $program) {
                 DB::table('programs')->insertOrIgnore([
-                    'id'         => Str::uuid(),
+                    'id'         => (string) Str::uuid(),
                     'college_id' => $collegeId,
                     'code'       => $program['code'],
                     'name'       => $program['name'],

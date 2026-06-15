@@ -91,7 +91,7 @@ class SubjectSeeder extends Seeder
 
         foreach ($subjects as $subject) {
             DB::table('subjects')->insertOrIgnore([
-                'id'         => Str::uuid(),
+                'id'         => (string) Str::uuid(),
                 'program_id' => $bscsId,
                 'code'       => $subject['code'],
                 'title'      => $subject['title'],
