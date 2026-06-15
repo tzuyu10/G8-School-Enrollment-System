@@ -40,7 +40,7 @@ class EnrollmentController extends Controller
 
         $yearLevels = YearLevel::orderBy('sort_order')->get();
 
-        return view('enroll', [
+        return view('student.enroll', [
             'user'           => $user,
             'activeSemester' => $activeSemester,
             'semesters'      => $semesters,

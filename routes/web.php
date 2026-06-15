@@ -7,6 +7,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrarController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\RecordsController;
 use App\Http\Controllers\UtilController;
 
 // ─── Guest only (redirect authenticated users to their dashboard) ─
@@ -34,7 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:student')->group(function () {
         Route::get('/student', [StudentController::class, 'index'])->name('student.dashboard');
         Route::get('/enroll', [EnrollmentController::class, 'form'])->name('enroll.form');
+        Route::get('/profile', [StudentController::class, 'profile'])->name('student.profile'); 
         Route::post('/enroll', [EnrollmentController::class, 'submit'])->name('enroll.submit');
+        Route::get('/records', [RecordsController::class, 'records'])->name('student.records');
     });
 
     // Admin

@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registrar Dashboard | PUP Enrollment Portal</title>
-    <link rel="stylesheet" href="{{ asset('css/common/main.css') }}">
-    @vite(['resources/sass/app.scss','resources/js/app.js'])
-</head>
-<body>
-    @include('common.navbar')
-    @include('common.sidebar')
+@extends('common.main')
+@section('title', 'Registrar Dashboard | PUP Enrollment Portal')
+@section('content')
 
     <main class="main-content p-4">
         <h1 class="h3 fw-bold mb-1">Registrar Dashboard</h1>
@@ -63,7 +54,7 @@
                                 <td>
                                     @php $statusCode = $app->status->code ?? 'pending'; @endphp
                                     <span class="badge rounded-pill"
-                                        style="background-color: {{ $app->status->color ?? '#6c757d' }}">
+                                        style="background-color: {{ $app->status->color ?? '#6c757d' }}; color: #6c757d;">
                                         {{ $app->status->label ?? ucfirst($statusCode) }}
                                     </span>
                                 </td>
@@ -225,5 +216,4 @@
             document.getElementById('rejectForm').action = `/registrar/applications/${appId}/reject`;
         });
     </script>
-</body>
-</html>
+@endsection

@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Management | PUP Enrollment Portal</title>
-    <link rel="stylesheet" href="{{ asset('css/common/main.css') }}">
-    @vite([
-        'resources/sass/app.scss',
-        'resources/js/app.js'
-    ])
-</head>
-<body>
-    @include('common.navbar')
-    @include('common.sidebar')
+@extends('common.main')
 
+@section('title', 'User Management | PUP Enrollment Portal')
+@section('content')
     <main class="main-content p-4">
         <h1 class="h3 fw-bold mb-1">User Management</h1>
         <p class="text-muted mb-4">View and filter portal accounts.</p>
@@ -55,7 +43,7 @@
                     <input id="email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
                     @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label class="form-label" for="password">Password</label>
                     <input id="password" name="password" type="password" class="form-control @error('password') is-invalid @enderror" required>
                     @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -148,5 +136,4 @@
             </table>
         </div>
     </main>
-</body>
-</html>
+@endsection

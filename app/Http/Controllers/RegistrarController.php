@@ -51,7 +51,7 @@ class RegistrarController extends Controller
             ];
         })->values()->toJson();
 
-        return view('registrar', compact(
+        return view('admin.registrar', compact(
             'pendingApplications',
             'recentApplications',
             'sectionsJson'

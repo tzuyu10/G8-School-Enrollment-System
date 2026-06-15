@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Student Dashboard</title>
+    <title>@yield('title', 'PUP Enrollment Portal')</title>
+    <link rel="icon" type="image/png" href="{{ asset('build/assets/images/pup-logo.png') }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset('css/common/main.css') }}">
-    
-    @vite([
-        'resources/sass/app.scss',
-        'resources/js/app.js'
-    ])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body>
     @include('common.navbar')
     @include('common.sidebar')
-    <div class="main-content p-4">
-        <h1><b>Student Profile</b></h1>
-        <p>Main page content goes here.</p>
-    </div>
+
+    <main class="main-content p-4" id="mainContent" style="margin-left: 180px; margin-top: 60px; transition: margin-left 0.25s ease;">
+        @yield('content')
+    </main>
+
+    <script src="{{ asset('js/sidebar.js') }}"></script>
+    @stack('scripts')
 </body>
 </html>

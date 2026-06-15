@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faculty Dashboard | PUP Enrollment Portal</title>
-    <link rel="stylesheet" href="{{ asset('css/common/main.css') }}">
-    @vite([
-        'resources/sass/app.scss',
-        'resources/js/app.js'
-    ])
-</head>
-<body>
-    @include('common.navbar')
-    @include('common.sidebar')
+@extends('common.main')
+@section('title', 'Faculty Dashboard | PUP Enrollment Portal')
+@section('content')
 
     <main class="main-content p-4">
         <h1 class="h3 fw-bold mb-1">Faculty Dashboard</h1>
@@ -78,5 +66,4 @@
             </div>
         </section>
     </main>
-</body>
-</html>
+@endsection

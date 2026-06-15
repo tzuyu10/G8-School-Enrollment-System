@@ -14,7 +14,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin', [
+        return view('admin.admin', [
             'profileCount' => Profile::count(),
             'pendingApplications' => EnrollmentApplication::whereHas('status', fn ($query) => $query->where('code', 'pending'))->count(),
             'recentApplications' => EnrollmentApplication::with(['student', 'program', 'status'])
@@ -36,7 +36,7 @@ class AdminController extends Controller
             $query->whereHas('status', fn ($status) => $status->where('code', $request->status));
         }
 
-        return view('admin-users', [
+        return view('admin.admin-users', [
             'users' => $query->orderBy('created_at', 'desc')->get(),
             'roles' => Role::orderBy('label')->get(),
             'statuses' => ProfileStatus::orderBy('label')->get(),

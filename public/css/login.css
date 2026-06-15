@@ -196,41 +196,13 @@ body::before {
 
 .input-group .form-control {
     border-right: none;
-    border-radius: 11.166px 0 0 11.166px;
+    border-radius: 11.166px;
 }
 
 .input-group .form-control:focus {
     box-shadow: none;
     border-color: #fff;
 }
-
-.pw-toggle {
-    border-radius: 0 11.166px 11.166px 0 !important;
-    border: 1px solid #fff;
-    border-left: none;
-    color: rgba(255,255,255,.75);
-    
-}
-
-.pw-toggle:hover,
-.pw-toggle:focus {
-    color: #fff;
-    box-shadow: 0 3px 7.5px 0 rgba(255,255,255,.60) inset;
-}
-
-.input-group:focus-within .pw-toggle {
-    border-color: #fff;
-}
-
-/* Forgot link */
-.forgot-link {
-    font-size: .74rem;
-    font-weight: 500;
-    color: white;
-    text-decoration: none;
-}
-
-.forgot-link:hover { text-decoration: underline; color: #fff; }
 
 /* Sign-in button */
 .btn-signin {

@@ -51,6 +51,19 @@ class StudentProfile extends Model
         'birthdate' => 'date',
     ];
 
+    protected const REQUIRED_FIELDS = [
+        'student_type',
+        'birthdate',
+        'gender',
+        'civil_status',
+        'contact_number',
+        'permanent_address',
+        'guardian_first_name',
+        'guardian_last_name',
+        'guardian_relation',
+        'guardian_contact',
+    ];
+
     // ── Computed names ────────────────────────────────────────
     public function getFatherNameAttribute(): string
     {
@@ -74,4 +87,24 @@ class StudentProfile extends Model
     {
         return $this->belongsTo(Profile::class, 'profile_id');
     }
+
+    public function getProfileStatus(): array
+    {
+        $missing = collect(self::REQUIRED_FIELDS)
+            ->reject(fn($field) => filled($this->$field))
+            ->values()
+            ->all();
+
+        $total = count(self::REQUIRED_FIELDS);
+        $filled = $total - count($missing);
+        $isComplete = empty($missing);
+
+        return [
+            'is_complete'    => $isComplete,
+            'label'          => $isComplete ? 'Complete' : 'Incomplete',
+            'percentage'     => $total > 0 ? (int) round(($filled / $total) * 100) : 0,
+            'missing_fields' => $missing,
+        ];
+    }
+
 }

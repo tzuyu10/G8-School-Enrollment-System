@@ -10,7 +10,7 @@ class FacultyController extends Controller
 {
     public function index(Request $request)
     {
-        return view('faculty', [
+        return view('faculty.faculty', [
             'advisedSections' => Section::where('adviser_id', $request->user()->id)
                 ->with(['program', 'yearLevel', 'semester'])
                 ->get(),

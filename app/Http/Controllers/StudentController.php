@@ -26,7 +26,6 @@ class StudentController extends Controller
             ->orderBy('submitted_at', 'desc')
             ->get();
 
-        // No cache — direct query to avoid unserialize issues
         $activeSemester = Semester::where('is_active', true)->first();
 
         $hasActiveApplication = $activeSemester
@@ -36,6 +35,25 @@ class StudentController extends Controller
                 ->isNotEmpty()
             : false;
 
-        return view('student', compact('user', 'applications', 'hasActiveApplication'));
+        return view('student.student', compact('user', 'applications', 'hasActiveApplication'));
+    }
+
+    /**
+     * Show the student's full profile.
+     */
+    public function profile(Request $request)
+    {
+        $user = $request->user()->load(['role', 'status', 'studentProfile']);
+
+        $profileStatus = $user->studentProfile
+            ? $user->studentProfile->getProfileStatus()
+            : [
+                'is_complete'    => false,
+                'label'          => 'Incomplete',
+                'percentage'     => 0,
+                'missing_fields' => [],
+            ];
+
+        return view('student.profile', compact('user', 'profileStatus'));
     }
 }
