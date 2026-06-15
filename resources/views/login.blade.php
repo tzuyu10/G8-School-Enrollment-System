@@ -16,6 +16,12 @@
 </head>
 <body>
 
+@if (session('status'))
+    <div class="alert alert-success py-2 small">
+        {{ session('status') }}
+    </div>
+@endif
+
 <!-- HERO -->
 <section class="hero">
 
@@ -50,17 +56,27 @@
             <p class="card-title-custom mb-1">Welcome back, Iskolar!</p>
             <p class="card-sub mb-4">Login and stay connected.</p>
 
-            <form action="#" method="POST">
+            @if ($errors->any())
+                <div class="alert alert-danger py-2 small">
+                    {{ $errors->first() }}
+                </div>
+            @endif
 
-                <!-- Student ID -->
+            <form action="{{ route('login.submit') }}" method="POST">
+                @csrf
+
+                <!-- Email -->
                 <div class="mb-3">
-                    <label class="form-label" for="student_id">Student ID Number</label>
+                    <label class="form-label" for="email">Email Address</label>
                     <input 
-                        id="student_id"
-                        type="text"
+                        id="email"
+                        name="email"
+                        type="email"
                         class="form-control"
-                        placeholder="202X-XXXX-MN-0"
-                        autocomplete="off"
+                        placeholder="name@example.com"
+                        value="{{ old('email') }}"
+                        autocomplete="email"
+                        required
                     >
                 </div>
 
@@ -70,10 +86,12 @@
                     <div class="input-group">
                         <input
                             id="password"
+                            name="password"
                             type="password"
                             class="form-control"
                             placeholder="Enter your password"
                             autocomplete="current-password"
+                            required
                         >
                         <button
                             type="button"
@@ -86,15 +104,18 @@
                     </div>
                 </div>
 
-                <div class="mb-3 mt-1">
-                    <a href="#" class="forgot-link">Forgot Password?</a>
+                <div class="d-flex justify-content-between align-items-center mb-3 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember">
+                        <label class="form-check-label small" for="remember">Remember me</label>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-signin w-100">Sign in to Portal</button>
             </form>
 
             <p class="contact-note text-center mt-3 mb-0">
-                Don't have an account? <a href="#">Register</a>
+                Don't have an account? <a href="{{ url('/register') }}">Register</a>
             </p>
 
         </div>

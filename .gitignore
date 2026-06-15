@@ -1,26 +1,51 @@
-*.log
-.DS_Store
+# Environment
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
 /auth.json
-/node_modules
-/public/fonts-manifest.dev.json
-/public/hot
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build output
+/public/build/
+/public/hot/
 /public/storage
+/public/fonts-manifest.dev.json
+
+# Laravel cache & framework
+/bootstrap/cache/*.php
 /storage/*.key
 /storage/pail
-/vendor
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/logs/
+*.log
+
+# Database
+database/database.sqlite
+database/*.sqlite
+
+# Testing
+/.phpunit.cache
+.phpunit.result.cache
+
+# IDE / Editor
+/.idea
+/.vscode
+/.cursor/
+/.nova
+/.zed
+/.codex
+.phpactor.json
 _ide_helper.php
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vagrant
 Homestead.json
 Homestead.yaml
-Thumbs.db
