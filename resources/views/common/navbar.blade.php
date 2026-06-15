@@ -15,7 +15,13 @@
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="{{ auth()->check() ? match (auth()->user()->role->code) {
+            'admin' => route('admin.dashboard'),
+            'registrar' => route('registrar.dashboard'),
+            'faculty' => route('faculty.dashboard'),
+            'student' => route('student.dashboard'),
+            default => route('unauthorized'),
+          } : route('login') }}">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Profile</a>
@@ -24,7 +30,10 @@
           <a class="nav-link" href="#">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Logout</a>
+          <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="nav-link btn btn-link border-0">Logout</button>
+          </form>
         </li>
       </ul>
     </div>
