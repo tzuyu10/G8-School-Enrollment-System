@@ -47,7 +47,10 @@ class AdminController extends Controller
     public function storeUser(Request $request)
     {
         $validated = $request->validate([
-            'full_name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['nullable', 'string', 'max:50'],
             'email' => ['required', 'email', 'unique:profiles,email'],
             'password' => ['required', 'string', 'min:8'],
             'role' => ['required', 'in:faculty,registrar,admin'],
@@ -60,7 +63,10 @@ class AdminController extends Controller
             'id' => (string) Str::uuid(),
             'role_id' => $role->id,
             'status_id' => $activeStatus->id,
-            'full_name' => $validated['full_name'],
+            'first_name' => $validated['first_name'],
+            'middle_name' => $validated['middle_name'] ?? null,
+            'last_name' => $validated['last_name'],
+            'suffix' => $validated['suffix'] ?? null,
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);

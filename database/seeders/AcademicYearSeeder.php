@@ -10,7 +10,7 @@ class AcademicYearSeeder extends Seeder
 {
     public function run(): void
     {
-        $academicYearId = Str::uuid();
+        $academicYearId = (string) Str::uuid();
 
         DB::table('academic_years')->insertOrIgnore([
             'id'         => $academicYearId,
@@ -20,9 +20,13 @@ class AcademicYearSeeder extends Seeder
             'is_active'  => true,
         ]);
 
+        $academicYearId = DB::table('academic_years')
+            ->where('label', '2025-2026')
+            ->value('id');
+
         DB::table('semesters')->insertOrIgnore([
             [
-                'id'               => Str::uuid(),
+                'id'               => (string) Str::uuid(),
                 'academic_year_id' => $academicYearId,
                 'label'            => '1st Semester',
                 'start_date'       => '2025-08-01',
@@ -30,7 +34,7 @@ class AcademicYearSeeder extends Seeder
                 'is_active'        => false,
             ],
             [
-                'id'               => Str::uuid(),
+                'id'               => (string) Str::uuid(),
                 'academic_year_id' => $academicYearId,
                 'label'            => '2nd Semester',
                 'start_date'       => '2026-02-09',
@@ -38,7 +42,7 @@ class AcademicYearSeeder extends Seeder
                 'is_active'        => true,
             ],
             [
-                'id'               => Str::uuid(),
+                'id'               => (string) Str::uuid(),
                 'academic_year_id' => $academicYearId,
                 'label'            => 'Summer',
                 'start_date'       => '2026-06-22',

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registrar Dashboard | PUP Enrollment Portal</title>
     <link rel="stylesheet" href="{{ asset('css/common/main.css') }}">
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss','resources/js/app.js'])
 </head>
 <body>
     @include('common.navbar')
@@ -29,13 +29,11 @@
             </div>
         @endif
 
-        {{-- Summary card --}}
         <div class="border rounded p-3 mb-4">
             <div class="text-muted small">Pending Applications</div>
             <div class="display-6 fw-bold text-warning">{{ $pendingApplications }}</div>
         </div>
 
-        {{-- Applications table --}}
         <section>
             <h2 class="h5 fw-bold mb-3">Recent Applications</h2>
             <div class="table-responsive">
@@ -69,10 +67,7 @@
                                         {{ $app->status->label ?? ucfirst($statusCode) }}
                                     </span>
                                 </td>
-                                <td class="small">
-                                    {{-- Note: Ensure 'submitted_at' is added to $casts as 'datetime' in your Application Model --}}
-                                    {{ $app->submitted_at ? $app->submitted_at->format('M d, Y') : 'N/A' }}
-                                </td>
+                                <td class="small">{{ optional($app->submitted_at)->format('M d, Y') }}</td>
                                 <td>
                                     @if ($statusCode === 'pending')
                                         <button
@@ -80,7 +75,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#approveModal"
                                             data-app-id="{{ $app->id }}"
-                                            data-student-name="{{ $app->student->full_name ?? 'N/A' }}"
+                                            data-student-name="{{ $app->student->full_name }}"
                                             data-year-level-id="{{ $app->year_level_id }}"
                                             data-semester-id="{{ $app->semester_id }}">
                                             Approve
@@ -90,7 +85,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#rejectModal"
                                             data-app-id="{{ $app->id }}"
-                                            data-student-name="{{ $app->student->full_name ?? 'N/A' }}">
+                                            data-student-name="{{ $app->student->full_name }}">
                                             Reject
                                         </button>
                                     @elseif ($statusCode === 'approved')
@@ -118,11 +113,11 @@
     </main>
 
     {{-- Approve Modal --}}
-    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="approveModalLabel">Approve Application</h5>
+                    <h5 class="modal-title">Approve Application</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form method="POST" id="approveForm">
@@ -142,7 +137,6 @@
                         <div class="alert alert-info small mb-0">
                             <i class="bi bi-info-circle me-1"></i>
                             Only sections matching the student's year level and semester are shown.
-                            Subjects will be auto-assigned from the section's offerings.
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -155,11 +149,11 @@
     </div>
 
     {{-- Reject Modal --}}
-    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="rejectModalLabel">Reject Application</h5>
+                    <h5 class="modal-title">Reject Application</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form method="POST" id="rejectForm">
@@ -186,33 +180,19 @@
         </div>
     </div>
 
-    {{-- Script Engine --}}
     <script>
-        // Securely encode PHP collection payload to escape raw quotes/XSS
-        const allSections = {!! json_encode($sections->map(fn($s) => [
-            'id'           => $s->id,
-            'name'         => $s->name,
-            'year_level_id'=> $s->year_level_id,
-            'semester_id'  => $s->semester_id,
-            'program_code' => $s->program->code ?? '',
-            'year_label'   => $s->yearLevel->label ?? '',
-            'sem_label'    => $s->semester->label ?? '',
-        ])) !!};
+        const allSections = {!! $sectionsJson !!};
 
-        // Approve Modal Event Handling
         document.getElementById('approveModal').addEventListener('show.bs.modal', function (event) {
             const btn         = event.relatedTarget;
             const appId       = btn.getAttribute('data-app-id');
             const studentName = btn.getAttribute('data-student-name');
-            
-            // Cast string metadata to strictly typed numeric forms
-            const yearLevelId = Number(btn.getAttribute('data-year-level-id'));
-            const semesterId  = Number(btn.getAttribute('data-semester-id'));
+            const yearLevelId = btn.getAttribute('data-year-level-id');
+            const semesterId  = btn.getAttribute('data-semester-id');
 
             document.getElementById('approveStudentName').textContent = studentName;
             document.getElementById('approveForm').action = `/registrar/applications/${appId}/approve`;
 
-            // Filter configuration via accurate dataset types
             const filtered = allSections.filter(s =>
                 s.year_level_id === yearLevelId && s.semester_id === semesterId
             );
@@ -225,21 +205,18 @@
                 opt.disabled = true;
                 opt.textContent = 'No sections available for this year level and semester';
                 select.appendChild(opt);
-                document.getElementById('sectionHint').textContent =
-                    'No matching sections found. Please create sections first.';
+                document.getElementById('sectionHint').textContent = 'No matching sections found.';
             } else {
-                document.getElementById('sectionHint').textContent =
-                    `${filtered.length} section(s) available.`;
+                document.getElementById('sectionHint').textContent = filtered.length + ' section(s) available.';
                 filtered.forEach(s => {
                     const opt = document.createElement('option');
                     opt.value = s.id;
-                    opt.textContent = `${s.name} (${s.program_code} — ${s.year_label} — ${s.sem_label})`;
+                    opt.textContent = s.name + ' (' + s.program_code + ' — ' + s.year_label + ' — ' + s.sem_label + ')';
                     select.appendChild(opt);
                 });
             }
         });
 
-        // Reject Modal Event Handling
         document.getElementById('rejectModal').addEventListener('show.bs.modal', function (event) {
             const btn         = event.relatedTarget;
             const appId       = btn.getAttribute('data-app-id');

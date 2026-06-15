@@ -12,15 +12,13 @@ use App\Models\SubjectEnrollment;
 use App\Models\SubjectEnrollmentStatus;
 use App\Models\SubjectOffering;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class RegistrarController extends Controller
 {
     public function index()
     {
-        $pendingApplications = EnrollmentApplication::whereHas(
-            'status',
+        $pendingApplications = EnrollmentApplication::whereHas('status',
             fn($q) => $q->where('code', 'pending')
         )->count();
 
@@ -40,7 +38,24 @@ class RegistrarController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('registrar', compact('pendingApplications', 'recentApplications', 'sections'));
+        // Pre-encode sections as JSON for the blade view
+        $sectionsJson = $sections->map(function ($s) {
+            return [
+                'id'            => $s->id,
+                'name'          => $s->name,
+                'year_level_id' => $s->year_level_id,
+                'semester_id'   => $s->semester_id,
+                'program_code'  => $s->program->code ?? '',
+                'year_label'    => $s->yearLevel->label ?? '',
+                'sem_label'     => $s->semester->label ?? '',
+            ];
+        })->values()->toJson();
+
+        return view('registrar', compact(
+            'pendingApplications',
+            'recentApplications',
+            'sectionsJson'
+        ));
     }
 
     public function approve(Request $request, string $id)
@@ -58,21 +73,18 @@ class RegistrarController extends Controller
         }
 
         DB::transaction(function () use ($application, $request, $approvedStatus, $enrolledStatus) {
-            // 1. Approve application
             $application->update([
                 'status_id'   => $approvedStatus->id,
                 'reviewed_by' => auth()->id(),
                 'reviewed_at' => now(),
             ]);
 
-            // 2. Assign section
             SectionAssignment::create([
                 'enrollment_id' => $application->id,
                 'section_id'    => $request->section_id,
                 'assigned_by'   => auth()->id(),
             ]);
 
-            // 3. Auto-enroll subjects
             $offerings = SubjectOffering::where('section_id', $request->section_id)->get();
             foreach ($offerings as $offering) {
                 SubjectEnrollment::firstOrCreate(
@@ -84,12 +96,10 @@ class RegistrarController extends Controller
                 );
             }
 
-            // 4. Activate student profile
             $application->student->update([
                 'status_id' => ProfileStatus::where('code', 'active')->value('id'),
             ]);
 
-            // 5. Assign student number if not yet assigned
             $studentProfile = StudentProfile::where('profile_id', $application->student_id)
                 ->lockForUpdate()
                 ->first();
@@ -100,9 +110,6 @@ class RegistrarController extends Controller
                 ]);
             }
         });
-
-        // Clear cached sections
-        Cache::forget('all_sections');
 
         return redirect()
             ->route('registrar.dashboard')
