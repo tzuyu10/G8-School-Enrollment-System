@@ -22,18 +22,27 @@ class SectionAndOfferingSeeder extends Seeder
 
         // ── Seed faculty ──────────────────────────────────────────
         $facultyData = [
-            ['first_name' => 'Ken', 'last_name' => 'Dela Cruz', 'email' => 'ken.delacruz@pup.edu.ph'],
-            ['first_name' => 'Von', 'last_name' => 'Santos', 'email' => 'von.santos@pup.edu.ph'],
-            ['first_name' => 'Florence', 'last_name' => 'Reyes', 'email' => 'florence.reyes@pup.edu.ph'],
-            ['first_name' => 'Gabriel', 'last_name' => 'Mendoza', 'email' => 'gabriel.mendoza@pup.edu.ph'],
-            ['first_name' => 'Maria', 'last_name' => 'Lim', 'email' => 'maria.lim@pup.edu.ph'],
-            ['first_name' => 'Jose', 'last_name' => 'Bautista', 'email' => 'jose.bautista@pup.edu.ph'],
-            ['first_name' => 'Ana', 'last_name' => 'Ramos', 'email' => 'ana.ramos@pup.edu.ph'],
+            ['Ken', 'Dela Cruz'], ['Von', 'Santos'], ['Florence', 'Reyes'], ['Gabriel', 'Mendoza'],
+            ['Maria', 'Lim'], ['Jose', 'Bautista'], ['Ana', 'Ramos'], ['Lara', 'Villanueva'],
+            ['Miguel', 'Garcia'], ['Paolo', 'Torres'], ['Nina', 'Navarro'], ['Rafael', 'Aquino'],
+            ['Bianca', 'Castillo'], ['Carlo', 'Domingo'], ['Erika', 'Flores'], ['Diane', 'Marquez'],
+            ['Jules', 'Cruz'], ['Leah', 'Ocampo'], ['Marco', 'Rivera'], ['Tanya', 'Salazar'],
+            ['Arvin', 'Valdez'], ['Celine', 'Yu'], ['Daryl', 'Chua'], ['Irene', 'Tan'],
+            ['Noel', 'Mercado'], ['Patricia', 'Sison'], ['Renzo', 'Lopez'], ['Sheila', 'Vargas'],
+            ['Tristan', 'Abad'], ['Yna', 'Soriano'], ['Cedric', 'Bernal'], ['Mara', 'Pineda'],
+            ['Oscar', 'Francisco'], ['Janine', 'Padilla'], ['Luis', 'Angeles'], ['Rhea', 'Molina'],
+            ['Adrian', 'Cabrera'], ['Belle', 'Ignacio'], ['Christian', 'Luna'], ['Denise', 'Velasco'],
+            ['Elmer', 'Natividad'], ['Faith', 'Rosales'], ['Gino', 'Silva'], ['Hazel', 'Manalo'],
+            ['Ivan', 'Del Rosario'], ['Joy', 'Santiago'], ['Kevin', 'Reyes'], ['Mika', 'Mendoza'],
+            ['Nestor', 'Sy'], ['Olivia', 'Go'], ['Patrick', 'Uy'], ['Queenie', 'Tiongson'],
+            ['Ramon', 'Co'], ['Sofia', 'Laurel'], ['Theo', 'Morales'], ['Vera', 'Reyes'],
         ];
 
         $facultyIds = [];
         foreach ($facultyData as $f) {
-            $existing = DB::table('profiles')->where('email', $f['email'])->value('id');
+            [$firstName, $lastName] = $f;
+            $email = strtolower($firstName . '.' . str_replace(' ', '', $lastName) . '@pup.edu.ph');
+            $existing = DB::table('profiles')->where('email', $email)->value('id');
             if ($existing) {
                 $facultyIds[] = $existing;
             } else {
@@ -42,14 +51,19 @@ class SectionAndOfferingSeeder extends Seeder
                     'id'         => $id,
                     'role_id'    => $facultyRole,
                     'status_id'  => $activeStatus,
-                    'first_name' => $f['first_name'],
-                    'last_name'  => $f['last_name'],
-                    'email'      => $f['email'],
+                    'first_name' => $firstName,
+                    'last_name'  => $lastName,
+                    'email'      => $email,
                     'password'   => Hash::make('faculty123'),
                     'created_at' => now(),
                 ]);
                 $facultyIds[] = $id;
             }
+        }
+
+        $facultyLoads = [];
+        foreach ($facultyIds as $facultyId) {
+            $facultyLoads[$facultyId] = ['subjects' => [], 'sections' => []];
         }
 
         // ── All possible schedule slots (day combo → times) ───────
@@ -216,11 +230,13 @@ class SectionAndOfferingSeeder extends Seeder
                         $room     = $labs[($sectionIndex + $subjectIndex) % count($labs)];
                     }
 
+                    $facultyId = $this->pickFaculty($facultyIds, $facultyLoads, $code, $sectionId);
+
                     DB::table('subject_offerings')->insert([
                         'id'         => (string) Str::uuid(),
                         'subject_id' => $subjectId,
                         'section_id' => $sectionId,
-                        'faculty_id' => $facultyIds[($sectionIndex + $subjectIndex) % count($facultyIds)],
+                        'faculty_id' => $facultyId,
                         'room'       => $room,
                         'schedule'   => $schedule,
                     ]);
@@ -228,5 +244,29 @@ class SectionAndOfferingSeeder extends Seeder
                 }
             }
         }
+    }
+
+    private function pickFaculty(array $facultyIds, array &$facultyLoads, string $subjectCode, string $sectionId): string
+    {
+        foreach ($facultyIds as $facultyId) {
+            $subjects = $facultyLoads[$facultyId]['subjects'];
+            $sections = $facultyLoads[$facultyId]['sections'];
+            $wouldAddSubject = !in_array($subjectCode, $subjects, true);
+            $wouldAddSection = !in_array($sectionId, $sections, true);
+
+            if (count($subjects) + ($wouldAddSubject ? 1 : 0) <= 2
+                && count($sections) + ($wouldAddSection ? 1 : 0) <= 6) {
+                if ($wouldAddSubject) {
+                    $facultyLoads[$facultyId]['subjects'][] = $subjectCode;
+                }
+                if ($wouldAddSection) {
+                    $facultyLoads[$facultyId]['sections'][] = $sectionId;
+                }
+
+                return $facultyId;
+            }
+        }
+
+        return $facultyIds[array_key_first($facultyIds)];
     }
 }
