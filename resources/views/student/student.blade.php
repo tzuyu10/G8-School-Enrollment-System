@@ -100,7 +100,7 @@
                         </div>
                     </div>
 
-                    @if ($app->status->code === 'approved')
+                    @if ($app->status->code === 'approved' || $app->subjectEnrollments->isNotEmpty())
                         <hr>
                         <div class="mb-3">
                             <div class="text-muted small mb-1">Assigned Section</div>
@@ -110,7 +110,9 @@
                             </div>
                         </div>
                         @if ($app->subjectEnrollments->isNotEmpty())
-                            <div class="text-muted small mb-2">Enrolled Subjects</div>
+                            <div class="text-muted small mb-2">
+                                {{ $app->status->code === 'approved' ? 'Enrolled Subjects' : 'Requested Subjects' }}
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-sm table-bordered align-middle mb-0">
                                     <thead class="table-light">
@@ -151,6 +153,13 @@
                             <div class="alert alert-info small mb-0">
                                 <i class="bi bi-info-circle me-1"></i>
                                 No subjects have been assigned yet. Please check back later.
+                            </div>
+                        @endif
+
+                        @if ($app->status->code === 'pending')
+                            <div class="alert alert-warning small mt-3 mb-0">
+                                <i class="bi bi-hourglass-split me-1"></i>
+                                Your selected subjects are being reviewed by the registrar.
                             </div>
                         @endif
 

@@ -68,7 +68,8 @@
                                             data-app-id="{{ $app->id }}"
                                             data-student-name="{{ $app->student->full_name }}"
                                             data-year-level-id="{{ $app->year_level_id }}"
-                                            data-semester-id="{{ $app->semester_id }}">
+                                            data-semester-id="{{ $app->semester_id }}"
+                                            data-requested-section-id="{{ $app->subjectEnrollments->pluck('subjectOffering.section_id')->filter()->unique()->first() }}">
                                             Approve
                                         </button>
                                         <button
@@ -180,12 +181,14 @@
             const studentName = btn.getAttribute('data-student-name');
             const yearLevelId = btn.getAttribute('data-year-level-id');
             const semesterId  = btn.getAttribute('data-semester-id');
+            const requestedSectionId = btn.getAttribute('data-requested-section-id');
 
             document.getElementById('approveStudentName').textContent = studentName;
             document.getElementById('approveForm').action = `/registrar/applications/${appId}/approve`;
 
             const filtered = allSections.filter(s =>
                 s.year_level_id === yearLevelId && s.semester_id === semesterId
+                && (!requestedSectionId || s.id === requestedSectionId)
             );
 
             const select = document.getElementById('section_id');

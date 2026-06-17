@@ -20,7 +20,17 @@ class Subject extends Model
         'title',
         'units',
         'type',
+        'prerequisite_codes',
     ];
+
+    public function getPrerequisitesAttribute(): array
+    {
+        return collect(explode(',', (string) $this->prerequisite_codes))
+            ->map(fn ($code) => trim($code))
+            ->filter()
+            ->values()
+            ->all();
+    }
 
     public function program(): BelongsTo
     {

@@ -5,6 +5,13 @@
         <h1 class="h3 fw-bold mb-1">Admin Dashboard</h1>
         <p class="text-muted mb-4">Monitor accounts and enrollment applications.</p>
 
+        @if (session('status'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('status') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         <div class="row g-3 mb-4">
             <div class="col-md-6">
                 <div class="border rounded p-3">
@@ -19,6 +26,22 @@
                 </div>
             </div>
         </div>
+
+        <section class="mb-4">
+            <h2 class="h5 fw-bold">Demo Controls</h2>
+            <div class="border rounded p-3 d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <div class="fw-semibold">Semester Availability</div>
+                    <div class="text-muted small">Make every semester selectable in demo enrollment forms.</div>
+                </div>
+                <form method="POST" action="{{ route('admin.semesters.activate-all') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-unlock me-1"></i> Make All Semesters Active
+                    </button>
+                </form>
+            </div>
+        </section>
 
         <section>
             <h2 class="h5 fw-bold">Recent Applications</h2>

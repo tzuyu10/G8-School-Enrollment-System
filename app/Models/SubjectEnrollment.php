@@ -17,6 +17,15 @@ class SubjectEnrollment extends Model
         'enrollment_id',
         'subject_offering_id',
         'status_id',
+        'grade',
+        'remarks',
+        'graded_by',
+        'graded_at',
+    ];
+
+    protected $casts = [
+        'grade' => 'decimal:2',
+        'graded_at' => 'datetime',
     ];
 
     public function enrollmentApplication(): BelongsTo
@@ -32,5 +41,19 @@ class SubjectEnrollment extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(SubjectEnrollmentStatus::class, 'status_id');
+    }
+
+    public function grader(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class, 'graded_by');
+    }
+
+    public function getGradeRemarkAttribute(): string
+    {
+        if ($this->grade === null) {
+            return 'Not encoded';
+        }
+
+        return (float) $this->grade <= 3.00 ? 'Passed' : 'Failed';
     }
 }

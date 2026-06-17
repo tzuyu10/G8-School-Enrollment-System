@@ -6,6 +6,7 @@ use App\Models\EnrollmentApplication;
 use App\Models\Profile;
 use App\Models\ProfileStatus;
 use App\Models\Role;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -89,5 +90,13 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.users')->with('status', 'User account updated successfully.');
+    }
+
+    public function activateAllSemesters()
+    {
+        Semester::query()->update(['is_active' => true]);
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', 'All semesters are now active for demo use.');
     }
 }

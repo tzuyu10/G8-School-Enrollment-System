@@ -24,9 +24,8 @@ class AcademicYearSeeder extends Seeder
             ->where('label', '2025-2026')
             ->value('id');
 
-        DB::table('semesters')->insertOrIgnore([
+        $semesters = [
             [
-                'id'               => (string) Str::uuid(),
                 'academic_year_id' => $academicYearId,
                 'label'            => '1st Semester',
                 'start_date'       => '2025-08-01',
@@ -34,7 +33,6 @@ class AcademicYearSeeder extends Seeder
                 'is_active'        => false,
             ],
             [
-                'id'               => (string) Str::uuid(),
                 'academic_year_id' => $academicYearId,
                 'label'            => '2nd Semester',
                 'start_date'       => '2026-02-09',
@@ -42,13 +40,30 @@ class AcademicYearSeeder extends Seeder
                 'is_active'        => true,
             ],
             [
-                'id'               => (string) Str::uuid(),
                 'academic_year_id' => $academicYearId,
                 'label'            => 'Summer',
                 'start_date'       => '2026-06-22',
                 'end_date'         => '2026-07-31',
                 'is_active'        => false,
             ],
-        ]);
+        ];
+
+        foreach ($semesters as $semester) {
+            DB::table('semesters')->updateOrInsert(
+                [
+                    'academic_year_id' => $semester['academic_year_id'],
+                    'label' => $semester['label'],
+                ],
+                [
+                    'id' => DB::table('semesters')
+                        ->where('academic_year_id', $semester['academic_year_id'])
+                        ->where('label', $semester['label'])
+                        ->value('id') ?? (string) Str::uuid(),
+                    'start_date' => $semester['start_date'],
+                    'end_date' => $semester['end_date'],
+                    'is_active' => $semester['is_active'],
+                ]
+            );
+        }
     }
 }

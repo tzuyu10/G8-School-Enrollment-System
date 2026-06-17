@@ -30,15 +30,24 @@ class BaseLookupSeeder extends Seeder
         ]);
 
         DB::table('subject_enrollment_statuses')->insertOrIgnore([
+            ['id' => (string) Str::uuid(), 'code' => 'requested', 'label' => 'Requested', 'color' => 'warning'],
             ['id' => (string) Str::uuid(), 'code' => 'enrolled', 'label' => 'Enrolled', 'color' => 'success'],
             ['id' => (string) Str::uuid(), 'code' => 'dropped', 'label' => 'Dropped', 'color' => 'danger'],
         ]);
 
-        DB::table('year_levels')->insertOrIgnore([
-            ['id' => (string) Str::uuid(), 'label' => '1st Year', 'sort_order' => 1],
-            ['id' => (string) Str::uuid(), 'label' => '2nd Year', 'sort_order' => 2],
-            ['id' => (string) Str::uuid(), 'label' => '3rd Year', 'sort_order' => 3],
-            ['id' => (string) Str::uuid(), 'label' => '4th Year', 'sort_order' => 4],
-        ]);
+        foreach ([
+            ['label' => '1st Year', 'sort_order' => 1],
+            ['label' => '2nd Year', 'sort_order' => 2],
+            ['label' => '3rd Year', 'sort_order' => 3],
+            ['label' => '4th Year', 'sort_order' => 4],
+        ] as $yearLevel) {
+            DB::table('year_levels')->updateOrInsert(
+                ['label' => $yearLevel['label']],
+                [
+                    'id' => DB::table('year_levels')->where('label', $yearLevel['label'])->value('id') ?? (string) Str::uuid(),
+                    'sort_order' => $yearLevel['sort_order'],
+                ]
+            );
+        }
     }
 }
