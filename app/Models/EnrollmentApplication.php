@@ -25,11 +25,16 @@ class EnrollmentApplication extends Model
         'reviewed_by',
         'reviewed_at',
         'remarks',
+        'prior_subject_grades',
+        'prior_subject_grades_verified',
+        'tor_document_path',
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
         'reviewed_at'  => 'datetime',
+        'prior_subject_grades' => 'array',
+        'prior_subject_grades_verified' => 'boolean',
     ];
 
     public function student(): BelongsTo

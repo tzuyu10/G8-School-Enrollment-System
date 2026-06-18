@@ -64,7 +64,12 @@ class RegistrarController extends Controller
             'section_id' => ['required', 'uuid', 'exists:sections,id'],
         ]);
 
-        $application    = EnrollmentApplication::with('status', 'student')->findOrFail($id);
+        $application    = EnrollmentApplication::with([
+            'status',
+            'student',
+            'subjectEnrollments.status',
+            'subjectEnrollments.subjectOffering',
+        ])->findOrFail($id);
         $approvedStatus = ApplicationStatus::where('code', 'approved')->firstOrFail();
         $enrolledStatus = SubjectEnrollmentStatus::where('code', 'enrolled')->firstOrFail();
 
@@ -85,15 +90,20 @@ class RegistrarController extends Controller
                 'assigned_by'   => auth()->id(),
             ]);
 
-            $offerings = SubjectOffering::where('section_id', $request->section_id)->get();
-            foreach ($offerings as $offering) {
-                SubjectEnrollment::firstOrCreate(
-                    [
-                        'enrollment_id'       => $application->id,
-                        'subject_offering_id' => $offering->id,
-                    ],
-                    ['status_id' => $enrolledStatus->id]
-                );
+            if ($application->subjectEnrollments->isNotEmpty()) {
+                SubjectEnrollment::where('enrollment_id', $application->id)
+                    ->update(['status_id' => $enrolledStatus->id]);
+            } else {
+                $offerings = SubjectOffering::where('section_id', $request->section_id)->get();
+                foreach ($offerings as $offering) {
+                    SubjectEnrollment::firstOrCreate(
+                        [
+                            'enrollment_id'       => $application->id,
+                            'subject_offering_id' => $offering->id,
+                        ],
+                        ['status_id' => $enrolledStatus->id]
+                    );
+                }
             }
 
             $application->student->update([

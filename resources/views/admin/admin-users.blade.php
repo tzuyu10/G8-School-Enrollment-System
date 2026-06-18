@@ -11,7 +11,9 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">Please review the form and try again.</div>
+            <div class="alert alert-danger">
+                {{ $errors->first('delete_user') ?: 'Please review the form and try again.' }}
+            </div>
         @endif
 
         <section class="border rounded p-3 mb-4">
@@ -96,7 +98,7 @@
                         <th>Role</th>
                         <th>Status</th>
                         <th>Student Number</th>
-                        <th>Update</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,7 +127,23 @@
                                 </select>
                             </td>
                             <td>{{ $user->studentProfile->student_number ?? 'N/A' }}</td>
-                            <td><button type="submit" form="update-user-{{ $user->id }}" class="btn btn-sm btn-outline-danger">Save</button></td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button type="submit" form="update-user-{{ $user->id }}" class="btn btn-sm btn-outline-danger">Save</button>
+                                    <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}"
+                                        data-delete-user-form
+                                        data-user-name="{{ $user->full_name }}"
+                                        data-user-email="{{ $user->email }}"
+                                        data-user-role="{{ $user->role?->code }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="confirm_delete" value="">
+                                        <button type="submit" class="btn btn-sm btn-danger" @disabled(auth()->id() === $user->id)>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -136,4 +154,28 @@
             </table>
         </div>
     </main>
+    <script>
+        document.querySelectorAll('[data-delete-user-form]').forEach(form => {
+            form.addEventListener('submit', event => {
+                const name = form.dataset.userName;
+                const email = form.dataset.userEmail;
+                const isStudent = form.dataset.userRole === 'student';
+
+                if (!isStudent) {
+                    if (!confirm(`Delete ${name}? This cannot be undone.`)) {
+                        event.preventDefault();
+                    }
+                    return;
+                }
+
+                const typed = prompt(`Permanent delete ${name} and all linked student records?\n\nType the student's email to confirm:\n${email}`);
+                if (typed !== email) {
+                    event.preventDefault();
+                    return;
+                }
+
+                form.querySelector('input[name="confirm_delete"]').value = typed;
+            });
+        });
+    </script>
 @endsection
