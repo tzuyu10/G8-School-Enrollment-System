@@ -20,7 +20,7 @@ class RegisterRequest extends FormRequest
             'password'    => ['required', 'string', 'min:8', 'confirmed'],
 
             // Student info
-            'student_type'      => ['required', 'in:freshman,transferee,shiftee,returnee'],
+            'student_type'      => ['required', 'in:freshman,transferee,shiftee,transferee_same_course,transferee_same_field,transferee_diff_field,shiftee_same_field,shiftee_diff_field', 'not_in:returnee'],
             'birthdate'         => ['required', 'date', 'before:today'],
             'gender'            => ['required', 'in:male,female,other'],
             'civil_status'      => ['required', 'in:single,married,widowed'],
@@ -65,6 +65,7 @@ class RegisterRequest extends FormRequest
             'last_name.required'           => 'Last name is required.',
             'email.unique'                 => 'This email is already registered.',
             'password.confirmed'           => 'Passwords do not match.',
+            'student_type.not_in'          => 'Returnees should contact the registrar instead of creating a new account.',
             'birthdate.before'             => 'Birthdate must be a past date.',
             'guardian_first_name.required' => 'Guardian first name is required.',
             'guardian_last_name.required'  => 'Guardian last name is required.',

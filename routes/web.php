@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
         Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
         Route::put('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+        Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
         Route::post('/admin/semesters/activate-all', [AdminController::class, 'activateAllSemesters'])->name('admin.semesters.activate-all');
     });
 

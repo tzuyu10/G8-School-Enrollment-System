@@ -29,6 +29,7 @@ class RegistrarController extends Controller
             'yearLevel',
             'status',
             'sectionAssignment.section',
+            'subjectEnrollments.status',
             'subjectEnrollments.subjectOffering.section',
         ])
             ->orderBy('submitted_at', 'desc')
@@ -68,6 +69,7 @@ class RegistrarController extends Controller
         $application    = EnrollmentApplication::with([
             'status',
             'student',
+            'subjectEnrollments.status',
             'subjectEnrollments.subjectOffering',
         ])->findOrFail($id);
         $approvedStatus = ApplicationStatus::where('code', 'approved')->firstOrFail();
@@ -93,13 +95,18 @@ class RegistrarController extends Controller
                 'reviewed_at' => now(),
             ]);
 
+            // Assign the section
             SectionAssignment::create([
                 'enrollment_id' => $application->id,
                 'section_id'    => $request->section_id,
                 'assigned_by'   => auth()->id(),
             ]);
 
-            if ($application->subjectEnrollments->isEmpty()) {
+            // Resolve subject enrollments based on block or custom selections
+            if ($application->subjectEnrollments->isNotEmpty()) {
+                SubjectEnrollment::where('enrollment_id', $application->id)
+                    ->update(['status_id' => $enrolledStatus->id]);
+            } else {
                 $offerings = SubjectOffering::where('section_id', $request->section_id)->get();
                 foreach ($offerings as $offering) {
                     SubjectEnrollment::firstOrCreate(
@@ -110,9 +117,6 @@ class RegistrarController extends Controller
                         ['status_id' => $enrolledStatus->id]
                     );
                 }
-            } else {
-                SubjectEnrollment::where('enrollment_id', $application->id)
-                    ->update(['status_id' => $enrolledStatus->id]);
             }
 
             $application->student->update([

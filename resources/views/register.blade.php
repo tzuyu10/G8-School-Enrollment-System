@@ -116,11 +116,14 @@
                             class="form-control @error('student_type') is-invalid @enderror" required>
                             <option value="" disabled selected>Select type</option>
                             <option value="freshman"   @selected(old('student_type')==='freshman')>Freshman</option>
-                            <option value="transferee" @selected(old('student_type')==='transferee')>Transferee</option>
-                            <option value="shiftee"    @selected(old('student_type')==='shiftee')>Shiftee</option>
-                            <option value="returnee"   @selected(old('student_type')==='returnee')>Returnee</option>
+                            <option value="transferee_same_course" @selected(old('student_type')==='transferee_same_course')>Transferee - Same Course</option>
+                            <option value="transferee_same_field" @selected(old('student_type')==='transferee_same_field')>Transferee - Same Field</option>
+                            <option value="transferee_diff_field" @selected(old('student_type')==='transferee_diff_field')>Transferee - Different Field</option>
+                            <option value="shiftee_same_field" @selected(old('student_type')==='shiftee_same_field')>Shiftee - Same Field</option>
+                            <option value="shiftee_diff_field" @selected(old('student_type')==='shiftee_diff_field')>Shiftee - Different Field</option>
                         </select>
                         @error('student_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <div class="form-text">Returnees should coordinate with the registrar for account reactivation.</div>
                     </div>
                     <div class="col-6 mb-3">
                         <label class="form-label" for="birthdate">Birthdate</label>
@@ -307,7 +310,7 @@
     const prevSchoolSection = document.getElementById('prev-school-section');
     function togglePrevSchool() {
         const type = studentTypeSelect.value;
-        prevSchoolSection.style.display = ['transferee','shiftee'].includes(type) ? 'block' : 'none';
+        prevSchoolSection.style.display = type.startsWith('transferee') || type.startsWith('shiftee') ? 'block' : 'none';
     }
     studentTypeSelect.addEventListener('change', togglePrevSchool);
     togglePrevSchool();
