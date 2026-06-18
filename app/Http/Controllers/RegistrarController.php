@@ -29,6 +29,8 @@ class RegistrarController extends Controller
             'yearLevel',
             'status',
             'sectionAssignment.section',
+            'subjectEnrollments.status',
+            'subjectEnrollments.subjectOffering.section',
         ])
             ->orderBy('submitted_at', 'desc')
             ->limit(20)
@@ -77,6 +79,15 @@ class RegistrarController extends Controller
             return back()->with('error', 'Application is already approved.');
         }
 
+        $requestedSectionIds = $application->subjectEnrollments
+            ->pluck('subjectOffering.section_id')
+            ->filter()
+            ->unique();
+
+        if ($requestedSectionIds->isNotEmpty() && !$requestedSectionIds->contains($request->section_id)) {
+            return back()->with('error', 'Assigned section must match the student selected subject schedule.');
+        }
+
         DB::transaction(function () use ($application, $request, $approvedStatus, $enrolledStatus) {
             $application->update([
                 'status_id'   => $approvedStatus->id,
@@ -84,12 +95,14 @@ class RegistrarController extends Controller
                 'reviewed_at' => now(),
             ]);
 
+            // Assign the section
             SectionAssignment::create([
                 'enrollment_id' => $application->id,
                 'section_id'    => $request->section_id,
                 'assigned_by'   => auth()->id(),
             ]);
 
+            // Resolve subject enrollments based on block or custom selections
             if ($application->subjectEnrollments->isNotEmpty()) {
                 SubjectEnrollment::where('enrollment_id', $application->id)
                     ->update(['status_id' => $enrolledStatus->id]);

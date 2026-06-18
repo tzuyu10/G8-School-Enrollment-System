@@ -255,7 +255,6 @@
 
             // 2. Identify as Tuesday ONLY if it contains 'T' and does NOT represent Thursday tokens
             if (daysStr.includes('T') && !daysStr.includes('Thu') && !daysStr.endsWith('Th') && daysStr !== 'TTh') {
-                // If it's a structural 'T' or explicit 'Tue', push 'T'
                 if (daysStr.includes('Tue') || daysStr === 'T' || daysStr.includes('MTW')) {
                     days.push('T');
                 }
@@ -320,7 +319,6 @@
             const startMin = normalize24h(start);
             const endMin = normalize24h(end);
 
-            // Return clean unique days array mapped to times
             return [...new Set(days)].map(day => ({
                 day,
                 start: startMin,
@@ -466,7 +464,6 @@
             const isChecked = controls.priorShowAll.checked;
 
             priorSubjectFields.forEach(field => {
-                // Fix: HTML datasets are automatically normalized to lowercase string maps
                 const fieldYearId = String(field.dataset.yearLevelId || '');
                 const shouldShow = isChecked || (fieldYearId === selectedYear);
                 
@@ -697,7 +694,6 @@
             }
         });
 
-        // Use standard input change bubbling pipeline
         controls.college.addEventListener('change', refreshPrograms);
         controls.section.addEventListener('change', () => {
             if (!isIrregular) {
@@ -714,7 +710,6 @@
         controls.priorYear?.addEventListener('change', refreshPriorSubjectFilter);
         controls.priorShowAll?.addEventListener('change', refreshPriorSubjectFilter);
         
-        // Initial engine invocation pipeline
         refreshPrograms();
         refreshPriorSubjectFilter();
         refreshTorField();

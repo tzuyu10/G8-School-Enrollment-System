@@ -76,6 +76,11 @@ class EnrollmentController extends Controller
             ->withCount(['subjectEnrollments as taken_seats_count' => function ($query) {
                 $query->whereHas('status', fn($status) => $status->whereIn('code', ['requested', 'enrolled']));
             }])
+            ->whereHas('section', function ($q) use ($activeSemester) {
+                if ($activeSemester) {
+                    $q->where('semester_id', $activeSemester->id);
+                }
+            })
             ->when($preservedSectionId, function ($query) use ($isIrregular, $preservedSectionId, $preservedSection, $resolvedRootDependencies) {
                 if (!$isIrregular || !$preservedSection) {
                     $query->where('section_id', $preservedSectionId);
@@ -664,11 +669,10 @@ class EnrollmentController extends Controller
 
     private function parseScheduleDays(string $days): array
     {
-        // Clean and normalize spacing
         $days = trim($days);
         $tokens = [];
 
-        // 1. Handle explicit 3-letter abbreviations (e.g., "Mon", "Tue", "Thu")
+        // 1. Handle explicit 3-letter abbreviations
         $threeLetterMap = [
             'Mon' => 'Mon',
             'Tue' => 'Tue',
@@ -682,25 +686,24 @@ class EnrollmentController extends Controller
         foreach ($threeLetterMap as $search => $resolved) {
             if (stripos($days, $search) !== false) {
                 $tokens[] = $resolved;
-                // Remove it so it doesn't get double-parsed by single characters later
                 $days = str_ireplace($search, '', $days);
             }
         }
 
-        // 2. Handle 2-letter compact representations (e.g., "Th" for Thursday)
+        // 2. Handle 2-letter compact representations
         if (stripos($days, 'Th') !== false) {
             $tokens[] = 'Thu';
             $days = str_ireplace('Th', '', $days);
         }
 
-        // 3. Fallback for single-letter compact codes (e.g., "M", "T", "W", "F")
+        // 3. Fallback for single-letter compact codes
         foreach (str_split($days) as $char) {
             $upperChar = strtoupper($char);
             $resolved = match ($upperChar) {
                 'M' => 'Mon',
                 'T' => 'Tue',
                 'W' => 'Wed',
-                'H' => 'Thu', // Accounts for systems using 'H' for Thursday
+                'H' => 'Thu',
                 'F' => 'Fri',
                 'S' => 'Sat',
                 default => null,
