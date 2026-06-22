@@ -76,10 +76,8 @@ class EnrollmentController extends Controller
             ->withCount(['subjectEnrollments as taken_seats_count' => function ($query) {
                 $query->whereHas('status', fn($status) => $status->whereIn('code', ['requested', 'enrolled']));
             }])
-            ->whereHas('section', function ($q) use ($activeSemester) {
-                if ($activeSemester) {
-                    $q->where('semester_id', $activeSemester->id);
-                }
+            ->whereHas('section', function ($q) use ($semesters) {
+                $q->whereIn('semester_id', $semesters->pluck('id'));
             })
             ->when($preservedSectionId, function ($query) use ($isIrregular, $preservedSectionId, $preservedSection, $resolvedRootDependencies) {
                 if (!$isIrregular || !$preservedSection) {
@@ -432,7 +430,7 @@ class EnrollmentController extends Controller
                 'prior_subject_grades_verified' => false,
                 'tor_document_path' => $torDocumentPath,
             ]);
-
+            
             foreach ($offerings as $offering) {
                 SubjectEnrollment::create([
                     'enrollment_id' => $application->id,

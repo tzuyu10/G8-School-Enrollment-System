@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class EnrollmentApplication extends Model
 {
+    use HasUuids;
+
     protected $table      = 'enrollment_applications';
     protected $primaryKey = 'id';
     protected $keyType    = 'string';
@@ -36,6 +39,7 @@ class EnrollmentApplication extends Model
         'prior_subject_grades' => 'array',
         'prior_subject_grades_verified' => 'boolean',
     ];
+
 
     public function student(): BelongsTo
     {
