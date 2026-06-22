@@ -1,0 +1,17 @@
+.git
+.codex
+.agents
+.env
+.env.*
+node_modules
+vendor
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*.php
+database/*.sqlite
+database/database.sqlite
+.phpunit.result.cache
+npm-debug.log
+yarn-error.log
