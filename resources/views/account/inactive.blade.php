@@ -12,7 +12,7 @@
     <div class="hero-bg"></div>
     <div class="hero-veil"></div>
     <a href="{{ route('login') }}" class="brand-mark d-flex align-items-center gap-2">
-        <div class="brand-seal"><img src="{{ asset('build/assets/images/pup-logo.png') }}" alt="PUP seal" style="width:42px;height:42px;border-radius:50%;"></div>
+        <div class="brand-seal"><img src="{{ asset('images/pup-logo.png') }}" alt="PUP seal" style="width:42px;height:42px;border-radius:50%;"></div>
         <div><div class="brand-name">PUP Enrollment Portal</div><div class="brand-sub">PUP School Enrollment System</div></div>
     </a>
     <div class="hero-left" aria-hidden="true">

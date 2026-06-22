@@ -17,7 +17,7 @@ body::before {
     position: fixed;
     inset: 0;
     background: linear-gradient(0deg, rgba(255, 255, 255, 0.27) 0%, rgba(255, 255, 255, 0.27) 100%), 
-    url('../../build/assets/images/background-image.png') lightgray 50% / cover no-repeat;
+    url('/images/background-image.png') lightgray 50% / cover no-repeat;
     filter: blur(4.25px) brightness(0.85);
     transform: scale(1.05);
     z-index: -1;
