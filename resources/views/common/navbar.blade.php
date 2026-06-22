@@ -40,7 +40,7 @@
         <!-- Brand -->
         <a class="navbar-brand d-flex align-items-center me-auto" href="#">
             <img
-                src="{{ asset('build/assets/images/pup-logo.png') }}"
+                src="{{ asset('images/pup-logo.png') }}"
                 alt="Logo"
                 width="40"
                 height="40"

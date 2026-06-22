@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ asset('build/assets/images/pup-logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/pup-logo.png') }}">
     <title>Page Not Found | PUP Enrollment Portal</title>
     @vite([
         'resources/sass/app.scss',
@@ -21,7 +21,7 @@
 
     <a href="{{ route('login') }}" class="brand-mark d-flex align-items-center gap-2">
         <div class="brand-seal">
-            <img src="{{ asset('build/assets/images/pup-logo.png') }}" alt="PUP seal" style="width:42px;height:42px;border-radius:50%;">
+            <img src="{{ asset('images/pup-logo.png') }}" alt="PUP seal" style="width:42px;height:42px;border-radius:50%;">
         </div>
         <div>
             <div class="brand-name">PUP Enrollment Portal</div>
