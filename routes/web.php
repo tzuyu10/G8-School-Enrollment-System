@@ -28,6 +28,9 @@ Route::view('/unauthorized', 'errors.unauthorized')->name('unauthorized');
 Route::view('/account/pending', 'account.pending')->name('account.pending');
 Route::view('/account/inactive', 'account.inactive')->name('account.inactive');
 
+// ─── About page (public) ────────────────────────────────────────
+Route::view('/about', 'about')->name('about');
+
 // ─── Authenticated routes ─────────────────────────────────────────
 Route::middleware('auth')->group(function () {
 
