@@ -15,6 +15,15 @@
         .login-card { width:100%; }
         .section-label { font-size:.7rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:.5rem; margin-top:1rem; }
     </style>
+    <style>
+        /* Quick global style override */
+        label:has(+ input[required])::after,
+        label:has(+ select[required])::after {
+            content: " *";
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 <section class="hero">
@@ -201,7 +210,7 @@
                 <p class="section-label">Family Background</p>
 
                 {{-- Father --}}
-                <p class="small text-muted mb-1">Father's Name</p>
+                <div class="form-label">Father's Name</div>
                 <div class="row g-2">
                     <div class="col-5 mb-2">
                         <input name="father_first_name" type="text" class="form-control"
@@ -218,7 +227,7 @@
                 </div>
 
                 {{-- Mother --}}
-                <p class="small text-muted mb-1 mt-1">Mother's Maiden Name</p>
+                <div class="form-label">Mother's Maiden Name</div>
                 <div class="row g-2">
                     <div class="col-5 mb-2">
                         <input name="mother_first_name" type="text" class="form-control"
@@ -235,7 +244,7 @@
                 </div>
 
                 {{-- Guardian --}}
-                <p class="small text-muted mb-1 mt-1">Guardian's Name</p>
+                <div class="form-label">Guardian's Name</div>
                 <div class="row g-2 mb-2">
                     <div class="col-5">
                         <input name="guardian_first_name" type="text"

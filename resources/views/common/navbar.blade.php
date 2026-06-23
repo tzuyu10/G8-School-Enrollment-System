@@ -72,8 +72,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                    <i class="bi bi-info-circle me-1"></i>
+                    <a class="nav-link" href="{{ route('about') }}">
+                        <i class="bi bi-info-circle me-1"></i>
                         About
                     </a>
                 </li>
