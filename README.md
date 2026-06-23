@@ -17,32 +17,17 @@
 </p>
 
 ---
-
-## Table of Contents
-
-- [About](#about)
-- [Tech Stack](#tech-stack)
-- [Scope Coverage](#scope-coverage)
-- [System Architecture](#system-architecture)
-- [User Roles](#user-roles)
-- [Enrollment Flow](#enrollment-flow)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Running Locally](#running-locally)
-- [Bootstrapping Admin & Registrar Accounts](#bootstrapping-admin--registrar-accounts)
-- [Notes](#notes)
-- [License](#license)
-
----
-
 ## About
 
 The **PUP School Enrollment System** is a full-stack web application that digitizes the student enrollment process for PUP. It supports the complete enrollment lifecycle — from student registration and form submission, to registrar review, section assignment, subject enrollment, and semester-based record keeping.
 
-Built by **Group 8** as a web development project.
+Built by **Group 8**:
+### Florence Lee F. Cansino
+### Elias Von Isaac R. Faeldonia
+### Ken Audie S. Lucero
+### Gabriel Andre E. Magtanong
 
+In fulfillment for the Course: COMP 016: Web Development 
 ---
 
 ## Tech Stack
