@@ -202,7 +202,7 @@
                 <div id="selected_offerings_inputs"></div>
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-danger">Submit Application</button>
+                    <button type="submit" class="btn btn-success">Submit Application</button>
                     <a href="{{ route('student.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
                 </div>
             </form>
