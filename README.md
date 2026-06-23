@@ -41,6 +41,7 @@ In fulfillment for the Course: COMP 016: Web Development
 | Auth       | Laravel Sanctum (API tokens)|
 | Frontend   | Blade Templates + Bootstrap 5 |
 | Assets     | Vite                        |
+| Deployment     | Render                  |
 
 ---
 
