@@ -58,6 +58,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/registrar', [RegistrarController::class, 'index'])->name('registrar.dashboard');
         Route::put('/registrar/applications/{id}/approve', [RegistrarController::class, 'approve'])->name('registrar.approve');
         Route::put('/registrar/applications/{id}/reject', [RegistrarController::class, 'reject'])->name('registrar.reject');
+        Route::get('/registrar/faculty/{faculty?}', [RegistrarController::class, 'faculty'])->name('registrar.faculty');
+        Route::put('/registrar/faculty/{faculty}/offerings/assign', [RegistrarController::class, 'assignFacultyOffering'])->name('registrar.faculty.offerings.assign');
+        Route::delete('/registrar/faculty/offerings/{offering}/unassign', [RegistrarController::class, 'unassignFacultyOffering'])->name('registrar.faculty.offerings.unassign');
     });
 
     // Faculty

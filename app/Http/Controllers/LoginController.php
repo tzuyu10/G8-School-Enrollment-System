@@ -64,7 +64,7 @@ class LoginController extends Controller
 
         StudentProfile::create([
             'profile_id'           => $profile->id,
-            'student_type'         => $request->student_type,
+            'student_type'         => 'freshman',
             'birthdate'            => $request->birthdate,
             'gender'               => $request->gender,
             'civil_status'         => $request->civil_status,

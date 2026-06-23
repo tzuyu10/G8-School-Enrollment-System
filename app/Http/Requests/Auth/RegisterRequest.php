@@ -20,7 +20,6 @@ class RegisterRequest extends FormRequest
             'password'    => ['required', 'string', 'min:8', 'confirmed'],
 
             // Student info
-            'student_type'      => ['required', 'in:freshman,transferee,shiftee,transferee_same_course,transferee_same_field,transferee_diff_field,shiftee_same_field,shiftee_diff_field', 'not_in:returnee'],
             'birthdate'         => ['required', 'date', 'before:today'],
             'gender'            => ['required', 'in:male,female,other'],
             'civil_status'      => ['required', 'in:single,married,widowed'],

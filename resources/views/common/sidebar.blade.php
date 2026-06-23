@@ -49,12 +49,20 @@
                     </a>
                 </li>
             @endif
-            @if (auth()->user()?->role?->code === 'registrar')
+           @if (auth()->user()?->role?->code === 'registrar')
                 <li class="nav-item">
-                    <a class="nav-link text-white {{ request()->routeIs('registrar.*') ? 'active' : '' }}"
-                       href="{{ route('registrar.dashboard') }}">
+                    <a class="nav-link text-white {{ request()->routeIs('registrar.dashboard', 'registrar.approve', 'registrar.reject') ? 'active' : '' }}"
+                    href="{{ route('registrar.dashboard') }}">
                         <i class="bi bi-clipboard-check me-2"></i>
                         <span class="nav-label">Applications</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ request()->routeIs('registrar.faculty*') ? 'active' : '' }}"
+                    href="{{ route('registrar.faculty') }}">
+                        <i class="bi bi-person-workspace me-2"></i>
+                        <span class="nav-label">Faculty</span>
                     </a>
                 </li>
             @endif

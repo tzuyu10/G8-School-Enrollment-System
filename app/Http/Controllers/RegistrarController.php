@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Profile;
 use App\Models\ApplicationStatus;
 use App\Models\EnrollmentApplication;
 use App\Models\ProfileStatus;
@@ -58,6 +58,85 @@ class RegistrarController extends Controller
             'recentApplications',
             'sectionsJson'
         ));
+    }
+    public function faculty(Request $request, ?string $faculty = null)
+    {
+        $facultyMembers = Profile::query()
+            ->whereHas('role', fn ($query) => $query->where('code', 'faculty'))
+            ->with(['status', 'subjectOfferings.section'])
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get();
+
+        $selectedFaculty = $faculty
+            ? Profile::whereHas('role', fn ($query) => $query->where('code', 'faculty'))->findOrFail($faculty)
+            : $facultyMembers->first();
+
+        if ($selectedFaculty) {
+            $selectedFaculty->load([
+                'subjectOfferings.subject.program',
+                'subjectOfferings.section.program',
+                'subjectOfferings.section.yearLevel',
+                'subjectOfferings.section.semester',
+            ]);
+        }
+
+        $offerings = SubjectOffering::with([
+                'subject.program',
+                'section.program',
+                'section.yearLevel',
+                'section.semester',
+                'faculty',
+            ])
+            ->get()
+            ->sortBy(fn ($offering) => sprintf(
+                '%s %s %s',
+                $offering->section->name ?? '',
+                $offering->subject->code ?? '',
+                $offering->schedule ?? ''
+            ))
+            ->values();
+
+        return view('admin.registrar-faculty', compact(
+            'facultyMembers',
+            'selectedFaculty',
+            'offerings'
+        ));
+    }
+
+    public function assignFacultyOffering(Request $request, string $faculty)
+    {
+        $data = $request->validate([
+            'subject_offering_id' => ['required', 'uuid', 'exists:subject_offerings,id'],
+            'room' => ['nullable', 'string', 'max:255'],
+            'schedule' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $facultyMember = Profile::whereHas('role', fn ($query) => $query->where('code', 'faculty'))
+            ->findOrFail($faculty);
+
+        $offering = SubjectOffering::findOrFail($data['subject_offering_id']);
+
+        $offering->update([
+            'faculty_id' => $facultyMember->id,
+            'room' => $data['room'] ?? null,
+            'schedule' => $data['schedule'] ?? null,
+        ]);
+
+        return redirect()
+            ->route('registrar.faculty', $facultyMember->id)
+            ->with('status', 'Faculty assignment saved successfully.');
+    }
+
+    public function unassignFacultyOffering(string $offering)
+    {
+        $subjectOffering = SubjectOffering::findOrFail($offering);
+
+        $subjectOffering->update([
+            'faculty_id' => null,
+        ]);
+
+        return back()->with('status', 'Faculty removed from the subject offering.');
     }
 
     public function approve(Request $request, string $id)

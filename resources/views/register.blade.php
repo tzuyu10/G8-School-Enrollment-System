@@ -120,30 +120,12 @@
 
                 <div class="row g-2">
                     <div class="col-6 mb-3">
-                        <label class="form-label" for="student_type">Student Type</label>
-                        <select id="student_type" name="student_type"
-                            class="form-control @error('student_type') is-invalid @enderror" required>
-                            <option value="" disabled selected>Select type</option>
-                            <option value="freshman"   @selected(old('student_type')==='freshman')>Freshman</option>
-                            <option value="transferee_same_course" @selected(old('student_type')==='transferee_same_course')>Transferee - Same Course</option>
-                            <option value="transferee_same_field" @selected(old('student_type')==='transferee_same_field')>Transferee - Same Field</option>
-                            <option value="transferee_diff_field" @selected(old('student_type')==='transferee_diff_field')>Transferee - Different Field</option>
-                            <option value="shiftee_same_field" @selected(old('student_type')==='shiftee_same_field')>Shiftee - Same Field</option>
-                            <option value="shiftee_diff_field" @selected(old('student_type')==='shiftee_diff_field')>Shiftee - Different Field</option>
-                        </select>
-                        @error('student_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        <div class="form-text">Returnees should coordinate with the registrar for account reactivation.</div>
-                    </div>
-                    <div class="col-6 mb-3">
                         <label class="form-label" for="birthdate">Birthdate</label>
                         <input id="birthdate" name="birthdate" type="date"
                             class="form-control @error('birthdate') is-invalid @enderror"
                             value="{{ old('birthdate') }}" required>
                         @error('birthdate')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                </div>
-
-                <div class="row g-2">
                     <div class="col-6 mb-3">
                         <label class="form-label" for="gender">Gender</label>
                         <select id="gender" name="gender"
@@ -154,6 +136,14 @@
                             <option value="other"  @selected(old('gender')==='other')>Other</option>
                         </select>
                         @error('gender')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-6 mb-3">
+                        <label class="form-label" for="religion">Religion</label>
+                        <input id="religion" name="religion" type="text" class="form-control"
+                            placeholder="e.g. Catholic" value="{{ old('religion') }}">
                     </div>
                     <div class="col-6 mb-3">
                         <label class="form-label" for="civil_status">Civil Status</label>
@@ -169,15 +159,9 @@
                 </div>
 
                 <div class="row g-2">
-                    <div class="col-6 mb-3">
-                        <label class="form-label" for="nationality">Nationality</label>
+                    <div class="col-12 mb-3"> <label class="form-label" for="nationality">Nationality</label>
                         <input id="nationality" name="nationality" type="text" class="form-control"
                             placeholder="e.g. Filipino" value="{{ old('nationality','Filipino') }}">
-                    </div>
-                    <div class="col-6 mb-3">
-                        <label class="form-label" for="religion">Religion</label>
-                        <input id="religion" name="religion" type="text" class="form-control"
-                            placeholder="e.g. Catholic" value="{{ old('religion') }}">
                     </div>
                 </div>
 
@@ -200,7 +184,7 @@
                     @error('permanent_address')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label class="form-label" for="current_address">Current Address <span class="text-muted small fw-normal">(if different from permanent)</span></label>
                     <textarea id="current_address" name="current_address" rows="2"
                         class="form-control" placeholder="Leave blank if same as permanent address">{{ old('current_address') }}</textarea>
@@ -313,16 +297,3 @@
 </section>
 
 @include('common.footer')
-
-<script>
-    const studentTypeSelect = document.getElementById('student_type');
-    const prevSchoolSection = document.getElementById('prev-school-section');
-    function togglePrevSchool() {
-        const type = studentTypeSelect.value;
-        prevSchoolSection.style.display = type.startsWith('transferee') || type.startsWith('shiftee') ? 'block' : 'none';
-    }
-    studentTypeSelect.addEventListener('change', togglePrevSchool);
-    togglePrevSchool();
-</script>
-</body>
-</html>
