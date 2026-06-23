@@ -3,6 +3,17 @@
 {{-- Backdrop overlay (mobile only) --}}
 <div id="sidebarBackdrop"></div>
 
+{{-- Sidebar collapse/expand/reopen handle --}}
+<button
+    type="button"
+    id="sidebarArrowToggle"
+    class="sidebar-arrow-toggle"
+    aria-label="Toggle sidebar"
+    aria-controls="mainSidebar"
+    aria-expanded="false">
+    <i class="bi bi-chevron-right"></i>
+</button>
+
 <aside class="sidebar bg-dark text-white" id="mainSidebar">
 
     <div class="sidebar-sticky" style="padding-top: 1rem;">

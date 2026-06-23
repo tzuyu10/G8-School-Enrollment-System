@@ -23,20 +23,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow-sm fixed-top">
     <div class="container-fluid px-4">
 
-        @auth
-        <!-- Sidebar Toggle -->
-        <button
-            id="sidebarToggle"
-            type="button"
-            class="btn p-1 me-2 border-0 d-flex align-items-center flex-shrink-0"
-            aria-label="Toggle sidebar"
-            aria-controls="mainSidebar"
-            aria-expanded="false"
-            style="color:#8B0000;">
-            <i class="bi bi-list fs-4" id="sidebarToggleIcon"></i>
-        </button>
-        @endauth
-
         <!-- Brand -->
         <a class="navbar-brand d-flex align-items-center me-auto" href="#">
             <img
@@ -60,8 +46,7 @@
         <button
             class="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
+            id="navbarTogglerBtn"
             aria-controls="navbarNav"
             aria-expanded="false"
             aria-label="Toggle navigation">

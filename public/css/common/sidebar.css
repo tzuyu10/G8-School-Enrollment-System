@@ -5,6 +5,7 @@
     bottom: 0;
     width: 200px;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1020;
     background:
         linear-gradient(180deg, rgba(128, 0, 0, 0.70) 24.21%, rgba(255, 255, 255, 0.70) 132.79%),
@@ -12,6 +13,14 @@
     display: flex;
     flex-direction: column;
     transition: width 0.25s ease, transform 0.25s ease;
+}
+
+.no-transition {
+    transition: none !important;
+}
+
+#mainContent {
+    transition: margin-left 0.25s ease;
 }
 
 .sidebar-sticky {
@@ -48,8 +57,20 @@
     display: flex;
 }
 
-.sidebar.collapsed .sidebar-toggle {
-    margin-inline: auto;
+/* Desktop: sidebar itself is the click target now (arrow removed) */
+@media (min-width: 992px) {
+    .sidebar {
+        cursor: pointer;
+    }
+
+    .sidebar.collapsed:hover {
+        filter: brightness(1.12);
+    }
+}
+
+/* Arrow handle: hidden by default (desktop) */
+.sidebar-arrow-toggle {
+    display: none;
 }
 
 /* Bottom user display */
@@ -135,6 +156,7 @@
         width: 200px !important;
         transform: translateX(-100%);
         z-index: 1040;
+        cursor: default; /* override desktop pointer cursor */
     }
 
     .sidebar.mobile-open {
@@ -187,5 +209,42 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    /* Arrow handle: only place it shows up, pinned to the upper area */
+    .sidebar-arrow-toggle {
+        display: flex;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 22px;
+        height: 46px;
+        align-items: center;
+        justify-content: center;
+        background: #8c1c1c;
+        color: #fff;
+        border: none;
+        border-radius: 0 6px 6px 0;
+        z-index: 1041;
+        cursor: pointer;
+        padding: 0;
+        transition: left 0.25s ease;
+    }
+
+    .sidebar-arrow-toggle:hover {
+        background: #6e1515;
+    }
+
+    .sidebar-arrow-toggle i {
+        font-size: 0.85rem;
+        transition: transform 0.25s ease;
+    }
+
+    .sidebar-arrow-toggle.active {
+        left: 200px;
+    }
+
+    .sidebar-arrow-toggle.active i {
+        transform: rotate(180deg);
     }
 }
