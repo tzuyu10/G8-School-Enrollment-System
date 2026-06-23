@@ -50,11 +50,11 @@ The system satisfies all five items in the defined project scope:
 
 | # | Scope Item                        | Status | Implementation Detail |
 |---|-----------------------------------|--------|-----------------------|
-| 1 | **Online enrollment form**        | ✅ Done | Students register and submit an enrollment application via `POST /api/register` + `POST /api/enrollment`. The form captures semester, program, year level, and student type. |
-| 2 | **Section/class assignment**      | ✅ Done | Registrar assigns a section upon approval via `PUT /api/applications/{id}/approve`. This creates a `section_assignments` record linking the enrollment to a specific section. |
-| 3 | **Subject enrollment per student**| ✅ Done | On approval, all subjects from the assigned section's offerings are automatically enrolled via `subject_enrollments`, each with a status (`enrolled`, `dropped`, `completed`, `failed`). |
-| 4 | **Approval by registrar/admin**   | ✅ Done | Registrar/Admin roles can list pending applications, then approve or reject them via protected API endpoints. Rejection requires remarks. |
-| 5 | **Student records per semester**  | ✅ Done | Records are scoped per `semester_id` (linked to `academic_years`). Students can check their application history and subject enrollments across semesters via `GET /api/enrollment/status`. |
+| 1 | **Online enrollment form**        | Done | Students register and submit an enrollment application via `POST /api/register` + `POST /api/enrollment`. The form captures semester, program, year level, and student type. |
+| 2 | **Section/class assignment**      | Done | Registrar assigns a section upon approval via `PUT /api/applications/{id}/approve`. This creates a `section_assignments` record linking the enrollment to a specific section. |
+| 3 | **Subject enrollment per student**| Done | On approval, all subjects from the assigned section's offerings are automatically enrolled via `subject_enrollments`, each with a status (`enrolled`, `dropped`, `completed`, `failed`). |
+| 4 | **Approval by registrar/admin**   | Done | Registrar/Admin roles can list pending applications, then approve or reject them via protected API endpoints. Rejection requires remarks. |
+| 5 | **Student records per semester**  | Done | Records are scoped per `semester_id` (linked to `academic_years`). Students can check their application history and subject enrollments across semesters via `GET /api/enrollment/status`. |
 
 ---
 
