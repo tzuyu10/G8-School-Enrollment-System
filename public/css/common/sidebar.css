@@ -43,7 +43,6 @@
     color: #fff !important;
 }
 
-/* Desktop collapsed state */
 .sidebar.collapsed {
     width: 56px;
 }
@@ -211,7 +210,6 @@
         text-overflow: ellipsis;
     }
 
-    /* Arrow handle: only place it shows up, pinned to the upper area */
     .sidebar-arrow-toggle {
         display: flex;
         position: fixed;

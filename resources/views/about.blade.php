@@ -283,6 +283,10 @@
                     Bootstrap 5
                 </span>
 
+                <span class="badge bg-info text-dark fs-6">
+                    CSS
+                </span>
+
             </div>
 
         </div>
@@ -301,31 +305,32 @@
             <div class="card shadow-sm h-100 text-center">
                 <div class="card-body">
 
-                    <img src="{{ asset('images/team/image.png') }}"
+                    <img src="https://github.com/saiionara.png"
                         class="rounded-circle mb-3 border"
                         width="100"
-                        height="100">
+                        height="100"
+                        alt="Florence Lee Cansino">
 
-                    <h6 class="fw-bold mb-1">
-                        Florence Lee Cansino
-                    </h6>
+                    <h6 class="fw-bold mb-1">Florence Lee Cansino</h6>
 
-                    <div class="small text-muted">
-                        UI/UX Designer & Frontend Developer
+                    <div class="small text-muted mb-1">UI/UX Designer & Frontend Developer</div>
+
+                    <div class="small mb-2">
+                        <a href="https://github.com/saiionara" target="_blank" class="text-decoration-none text-secondary">
+                            <i class="bi bi-github"></i> saiionara
+                        </a>
+                    </div>
+
+                    <div class="small mb-3">
+                        <a href="mailto:cansinoflorencelee44@gmail.com" class="text-decoration-none text-secondary">
+                            <i class="bi bi-envelope"></i> cansinoflorencelee44@gmail.com
+                        </a>
                     </div>
 
                     <div class="mt-2">
-                        <span class="badge bg-light text-dark">
-                            Laravel
-                        </span>
-
-                        <span class="badge bg-light text-dark">
-                            JavaScript
-                        </span>
-
-                        <span class="badge bg-light text-dark">
-                            Tailwind CSS
-                        </span>
+                        <span class="badge bg-light text-dark">Laravel</span>
+                        <span class="badge bg-light text-dark">JavaScript</span>
+                        <span class="badge bg-light text-dark">Tailwind CSS</span>
                     </div>
 
                 </div>
@@ -333,31 +338,36 @@
         </div>
 
         <!-- Member 2 -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
+         <div class="col-xl-3 col-lg-4 col-md-6">
             <div class="card shadow-sm h-100 text-center">
                 <div class="card-body">
 
-                    <img src="{{ asset('images/team/image.png') }}"
+                    <img src="https://github.com/tzuyu10.png"
                         class="rounded-circle mb-3 border"
                         width="100"
-                        height="100">
+                        height="100"
+                        alt="Elias Von Isaac Faeldonia">
 
-                    <h6 class="fw-bold mb-1">
-                        Ken Audie Lucero
-                    </h6>
+                    <h6 class="fw-bold mb-1">Elias Von Isaac Faeldonia</h6>
 
-                    <div class="small text-muted">
-                        Lead Backend Developer
+                    <div class="small text-muted mb-1">Lead Frontend Developer</div>
+
+                    <div class="small mb-2">
+                        <a href="https://github.com/tzuyu10" target="_blank" class="text-decoration-none text-secondary">
+                            <i class="bi bi-github"></i> tzuyu10
+                        </a>
+                    </div>
+
+                    <div class="small mb-3">
+                        <a href="mailto:faeldonia.10282005@gmail.com" class="text-decoration-none text-secondary">
+                            <i class="bi bi-envelope"></i> faeldonia.10282005@gmail.com
+                        </a>
                     </div>
 
                     <div class="mt-2">
-                        <span class="badge bg-light text-dark">
-                            Laravel
-                        </span>
-
-                        <span class="badge bg-light text-dark">
-                            PostgreSQL
-                        </span>
+                        <span class="badge bg-light text-dark">Laravel</span>
+                        <span class="badge bg-light text-dark">JavaScript</span>
+                        <span class="badge bg-light text-dark">Tailwind CSS</span>
                     </div>
 
                 </div>
@@ -369,32 +379,31 @@
             <div class="card shadow-sm h-100 text-center">
                 <div class="card-body">
 
-                    <img src="{{ asset('images/team/image.png') }}"
+                    <img src="https://github.com/kndlcero.png"
                         class="rounded-circle mb-3 border"
                         width="100"
-                        height="100">
+                        height="100"
+                        alt="Ken Audie Lucero">
 
-                    <h6 class="fw-bold mb-1">
-                        Elias Von Isaac Faeldonia
-                    </h6>
+                    <h6 class="fw-bold mb-1">Ken Audie Lucero</h6>
 
-                    <div class="small text-muted">
-                        Lead Frontend Developer
+                    <div class="small text-muted mb-1">Lead Backend Developer</div>
+
+                    <div class="small mb-2">
+                        <a href="https://github.com/kndlcero" target="_blank" class="text-decoration-none text-secondary">
+                            <i class="bi bi-github"></i> kndlcero
+                        </a>
+                    </div>
+
+                    <div class="small mb-3">
+                        <a href="mailto:kenaudielucero@gmail.com" class="text-decoration-none text-secondary">
+                            <i class="bi bi-envelope"></i> kenaudielucero@gmail.com
+                        </a>
                     </div>
 
                     <div class="mt-2">
-                        <span class="badge bg-light text-dark">
-                            Laravel
-                        </span>
-
-                        <span class="badge bg-light text-dark">
-                            JavaScript
-                        </span>
-
-                        <span class="badge bg-light text-dark">
-                            Tailwind CSS
-                        </span>
-
+                        <span class="badge bg-light text-dark">Laravel</span>
+                        <span class="badge bg-light text-dark">PostgreSQL</span>
                     </div>
 
                 </div>
@@ -406,27 +415,31 @@
             <div class="card shadow-sm h-100 text-center">
                 <div class="card-body">
 
-                    <img src="{{ asset('images/team/image.png') }}"
+                    <img src="https://github.com/Gaboomsz.png"
                         class="rounded-circle mb-3 border"
                         width="100"
-                        height="100">
+                        height="100"
+                        alt="Gabriel Andre Magtanong">
 
-                    <h6 class="fw-bold mb-1">
-                        Gabriel Andre Magtanong
-                    </h6>
+                    <h6 class="fw-bold mb-1">Gabriel Andre Magtanong</h6>
 
-                    <div class="small text-muted">
-                        UI/UX Designer & Backend Developer
+                    <div class="small text-muted mb-1">UI/UX Designer & Backend Developer</div>
+
+                    <div class="small mb-2">
+                        <a href="https://github.com/Gaboomsz" target="_blank" class="text-decoration-none text-secondary">
+                            <i class="bi bi-github"></i> Gaboomsz
+                        </a>
+                    </div>
+
+                    <div class="small mb-3">
+                        <a href="mailto:gabrielandremagtanong@gmail.com" class="text-decoration-none text-secondary">
+                            <i class="bi bi-envelope"></i> gabrielandremagtanong@gmail.com
+                        </a>
                     </div>
 
                     <div class="mt-2">
-                        <span class="badge bg-light text-dark">
-                            Laravel
-                        </span>
-
-                        <span class="badge bg-light text-dark">
-                            PostgreSQL
-                        </span>
+                        <span class="badge bg-light text-dark">Laravel</span>
+                        <span class="badge bg-light text-dark">PostgreSQL</span>
                     </div>
 
                 </div>
