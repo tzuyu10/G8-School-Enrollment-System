@@ -9,18 +9,36 @@
     <p class="text-muted mb-4">View your enrolled subjects, schedules, faculty, and encoded grades.</p>
 
     @forelse ($applications as $app)
-        <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex flex-wrap justify-content-between gap-2">
+        <div class="card shadow-sm mb-4 border border-3">
+            <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center gap-3 border-bottom">
+                
                 <div>
-                    <span class="fw-semibold">{{ $app->semester->label ?? 'N/A' }}</span>
-                    <span class="text-muted small ms-2">{{ $app->semester->academicYear->label ?? '' }}</span>
-                    <div class="text-muted small">
-                        {{ $app->program->code ?? 'N/A' }} | {{ $app->yearLevel->label ?? 'N/A' }} | {{ $app->sectionAssignment->section->name ?? 'Section pending' }}
+                    <div class="d-flex align-items-baseline mb-1">
+                        <h5 class="mb-0 fw-bold text-dark">{{ $app->semester->label ?? 'N/A' }}</h5>
+                        <span class="text-muted small ms-2 fw-medium">{{ $app->semester->academicYear->label ?? '' }}</span>
+                    </div>
+                    <div class="text-secondary small d-flex align-items-center gap-2">
+                        <span>{{ $app->yearLevel->label ?? 'N/A' }}</span>
+                        <span class="text-muted">•</span>
+                        <span>{{ $app->sectionAssignment->section->name ?? 'Section pending' }}</span>
                     </div>
                 </div>
-                <span class="badge rounded-pill align-self-center" style="background-color: {{ $app->status->color ?? '#6c757d' }}">
-                    {{ $app->status->label ?? 'Pending' }}
-                </span>
+
+                <div>
+                    @if($app->gwa !== null)
+                        <div class="border rounded px-3 py-2 bg-light text-center shadow-sm">
+                            <span class="d-block text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                Semester GWA
+                            </span>
+                            <span class="d-block fs-5 fw-bold text-success" style="line-height: 1;">
+                                {{ number_format($app->gwa, 2) }}
+                            </span>
+                        </div>
+                    @else
+                        <span class="badge bg-secondary-subtle text-secondary border">Not yet graded</span>
+                    @endif
+                </div>
+                
             </div>
 
             <div class="table-responsive">
@@ -47,11 +65,17 @@
                                 <td>{{ $enrollment->subjectOffering->room ?? 'TBA' }}</td>
                                 <td>{{ $enrollment->subjectOffering->faculty->full_name ?? 'TBA' }}</td>
                                 <td class="fw-semibold">
-                                    {{ $enrollment->grade !== null ? number_format((float) $enrollment->grade, 2) : '-' }}
+                                    @if ($enrollment->grade !== null)
+                                        <span class="{{ (float) $enrollment->grade <= 3.00 ? 'text-success' : 'text-danger' }}">
+                                            {{ number_format((float) $enrollment->grade, 2) }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if ($enrollment->grade !== null)
-                                        <span class="{{ (float) $enrollment->grade <= 3.00 ? 'text-success' : 'text-danger' }}">
+                                        <span>
                                             {{ $enrollment->remarks ?: $enrollment->grade_remark }}
                                         </span>
                                     @else

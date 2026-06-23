@@ -131,7 +131,7 @@
                                                 <td>{{ $enrollment->subjectOffering->room ?? 'TBA' }}</td>
                                                 <td>{{ $enrollment->subjectOffering->faculty->full_name ?? 'TBA' }}</td>
                                                 <td>
-                                                    <span class="badge rounded-pill" style="background-color: {{ $enrollment->status->color ?? '#6c757d' }}">
+                                                    <span class="badge rounded-pill bg-{{ $enrollment->status->color ?? 'secondary' }} {{ ($enrollment->status->code ?? '') === 'pending' ? 'text-dark' : '' }}">
                                                         {{ $enrollment->status->label ?? 'Enrolled' }}
                                                     </span>
                                                 </td>
