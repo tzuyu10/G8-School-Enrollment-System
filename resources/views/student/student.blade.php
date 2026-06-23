@@ -19,7 +19,7 @@
             <p class="text-muted mb-0">Welcome back, {{ $user->full_name }}.</p>
         </div>
         @if (!$hasActiveApplication)
-            <a href="{{ route('enroll.form') }}" class="btn btn-danger">
+            <a href="{{ route('enroll.form') }}" class="btn btn-primary">
                 <i class="bi bi-pencil-square me-1"></i> Enroll
             </a>
         @else

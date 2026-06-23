@@ -36,7 +36,7 @@
                 </div>
                 <form method="POST" action="{{ route('admin.semesters.activate-all') }}">
                     @csrf
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-unlock me-1"></i> Make All Semesters Active
                     </button>
                 </form>
@@ -60,7 +60,9 @@
                             <tr>
                                 <td>{{ $application->student->full_name ?? 'N/A' }}</td>
                                 <td>{{ $application->program->code ?? $application->program->name ?? 'N/A' }}</td>
-                                <td>{{ ucfirst($application->status->label ?? $application->status->code) }}</td>
+                                <td class="fw-semibold text-{{ $application->status->color ?? 'muted' }}">
+                                    {{ $application->status->label ?? ucfirst($application->status->code ?? 'N/A') }}
+                                </td>
                                 <td>{{ optional($application->submitted_at)->format('M d, Y') }}</td>
                             </tr>
                         @empty
