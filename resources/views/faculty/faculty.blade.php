@@ -73,8 +73,8 @@
                                         <td class="text-muted small">{{ $enrollment->enrollmentApplication->student->studentProfile->student_number ?? 'Pending' }}</td>
                                         <td>{{ $enrollment->enrollmentApplication->student->full_name ?? 'N/A' }}</td>
                                         <td>
-                                            <span class="badge rounded-pill" style="background-color: {{ $enrollment->status->color ?? '#6c757d' }}">
-                                                {{ $enrollment->status->label ?? 'Enrolled' }}
+                                            <span class="badge rounded-pill bg-{{ $enrollment->status->color ?? 'secondary' }} {{ ($enrollment->status->code ?? '') === 'pending' ? 'text-dark' : '' }}">
+                                                    {{ $enrollment->status->label ?? 'Enrolled' }}
                                             </span>
                                         </td>
                                         <td>
