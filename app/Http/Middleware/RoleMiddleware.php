@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
@@ -19,6 +20,20 @@ class RoleMiddleware
 
             return response()->json([
                 'message' => 'Unauthorized. You do not have permission to access this resource.',
+            ], 403);
+        }
+
+        if ($user->status?->code === 'inactive') {
+            if (!$request->expectsJson()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('account.inactive');
+            }
+
+            return response()->json([
+                'message' => 'Account inactive.',
             ], 403);
         }
 

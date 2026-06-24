@@ -216,6 +216,25 @@
                         <td>
                             <div class="d-flex flex-wrap gap-2">
                                 <button type="submit" form="update-user-{{ $user->id }}" class="btn btn-sm btn-success">Save</button>
+                                @if ($user->status?->code === 'inactive')
+                                <form method="POST" action="{{ route('admin.users.activate', $user->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                                        Activate
+                                    </button>
+                                </form>
+                                @else
+                                <form method="POST" action="{{ route('admin.users.deactivate', $user->id) }}"
+                                    data-deactivate-user-form
+                                    data-user-name="{{ $user->full_name }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary" @disabled(auth()->id() === $user->id)>
+                                        Deactivate
+                                    </button>
+                                </form>
+                                @endif
                                 <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}"
                                     data-delete-user-form
                                     data-user-name="{{ $user->full_name }}"
@@ -261,6 +280,16 @@
             }
 
             form.querySelector('input[name="confirm_delete"]').value = typed;
+        });
+    });
+
+    document.querySelectorAll('[data-deactivate-user-form]').forEach(form => {
+        form.addEventListener('submit', event => {
+            const name = form.dataset.userName;
+
+            if (!confirm(`Deactivate ${name}? They will no longer be able to access the portal.`)) {
+                event.preventDefault();
+            }
         });
     });
 </script>
