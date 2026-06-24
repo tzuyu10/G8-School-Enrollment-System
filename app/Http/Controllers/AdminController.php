@@ -90,7 +90,39 @@ class AdminController extends Controller
             'status_id' => ProfileStatus::where('code', $validated['status'])->firstOrFail()->id,
         ]);
 
+        if ($validated['status'] === 'inactive') {
+            $user->tokens()->delete();
+        }
+
         return redirect()->route('admin.users')->with('status', 'User account updated successfully.');
+    }
+
+    public function deactivateUser(Request $request, string $id)
+    {
+        if ($request->user()->id === $id) {
+            return redirect()->route('admin.users')
+                ->withErrors(['delete_user' => 'You cannot deactivate your own admin account while signed in.']);
+        }
+
+        $user = Profile::findOrFail($id);
+        $inactiveStatus = ProfileStatus::where('code', 'inactive')->firstOrFail();
+
+        $user->update(['status_id' => $inactiveStatus->id]);
+        $user->tokens()->delete();
+
+        return redirect()->route('admin.users')
+            ->with('status', "User account {$user->full_name} was deactivated successfully.");
+    }
+
+    public function activateUser(string $id)
+    {
+        $user = Profile::findOrFail($id);
+        $activeStatus = ProfileStatus::where('code', 'active')->firstOrFail();
+
+        $user->update(['status_id' => $activeStatus->id]);
+
+        return redirect()->route('admin.users')
+            ->with('status', "User account {$user->full_name} was activated successfully.");
     }
 
     public function destroyUser(Request $request, string $id)
@@ -106,6 +138,7 @@ class AdminController extends Controller
             'subjectOfferings',
             'reviewedApplications',
             'sectionAssignments',
+            'gradedSubjectEnrollments',
         ])->findOrFail($id);
 
         $linkedRecords = [
@@ -114,6 +147,7 @@ class AdminController extends Controller
             'subject offerings' => $user->subject_offerings_count,
             'reviewed applications' => $user->reviewed_applications_count,
             'section assignments' => $user->section_assignments_count,
+            'graded subject enrollments' => $user->graded_subject_enrollments_count,
         ];
 
         $activeLinks = collect($linkedRecords)

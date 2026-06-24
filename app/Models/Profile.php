@@ -83,4 +83,9 @@ class Profile extends Authenticatable
     {
         return $this->hasMany(SectionAssignment::class, 'assigned_by');
     }
+
+    public function gradedSubjectEnrollments(): HasMany
+    {
+        return $this->hasMany(SubjectEnrollment::class, 'graded_by');
+    }
 }

@@ -79,6 +79,12 @@ class AuthController extends Controller
             ], 401);
         }
 
+        if ($profile->status?->code === 'inactive') {
+            return response()->json([
+                'message' => 'Account inactive.',
+            ], 403);
+        }
+
         // Revoke previous tokens
         $profile->tokens()->delete();
 
